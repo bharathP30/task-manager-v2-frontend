@@ -21,7 +21,7 @@ const home = ({ api, token, setAuth }) => {
   const [filterStatus, setFilterStatus] = useState("");
 
   const buildFilterURL = () => {
-    let url = `${api}/todos`;
+    let url = `${api}/api/todos`;
     const params = new URLSearchParams();
 
     console.log("filters are, ", filterCat, filterPrio, filterStatus, searchTerm);
