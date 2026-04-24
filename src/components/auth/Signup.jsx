@@ -14,7 +14,7 @@ export default function Signup({ setAuth, api, setHaveAcc }) {
 
     try {
       console.log("running handleSubmit");
-      const res = await fetch(`${api}/auth/signup`, {
+      const res = await fetch(`${api}/api/auth/signup`, {
         method: "POST",
         headers: {
           "content-type": "application/json",

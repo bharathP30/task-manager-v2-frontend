@@ -11,7 +11,7 @@ export default function Login({ setAuth, api, setHaveAcc }) {
     if (!formData.email.trim() || !formData.password.trim()) return alert("Please enter the login details");
 
     try {
-      const res = await fetch(`${api}/auth/login`, {
+      const res = await fetch(`${api}/api/auth/login`, {
         method: "POST",
         headers: {
           "content-type": "application/json",
