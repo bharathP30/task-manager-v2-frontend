@@ -11,8 +11,6 @@ const home = ({ api, token, setAuth }) => {
   const [isAuthExpired, setIsAuthExpired] = useState(false);
   const [isWantToLogout, setIsWantToLogout] = useState(false);
 
-  console.log(isAuthExpired, isWantToLogout);
-
   const [todos, setTodos] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [filterPrio, setFilterPrio] = useState("");
