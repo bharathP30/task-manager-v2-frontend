@@ -5,7 +5,7 @@ import useAuth from "./components/functions/useAuth.js";
 
 export default function App() {
   const [auth, setAuth] = useAuth();
-  const BASE_API = "http://localhost:3000/api";
+  const BASE_API = import.meta.env.VITE_API_URL;
 
   
   console.log("Auth page -", !auth, "auth details :", auth?.user.name, auth?.user._id)
