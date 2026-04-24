@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import TaskItem from "./TaskItem";
 import UpdateForm from "./UpdateForm";
 
@@ -24,7 +24,7 @@ const TaskList = ({ todos, setTodos, fetchTodos, api, token }) => {
         setTodos((prev) => prev.map(t => t._id === todoId ? updateData : t)); // Optimistically update the UI
 
         try {
-            const res = await fetch(`${api}/todos/${todoId}`, {
+            const res = await fetch(`${api}/api/todos/${todoId}`, {
                 method: "PATCH",
                 headers: {
                     "content-type": "application/json",
@@ -55,7 +55,7 @@ const TaskList = ({ todos, setTodos, fetchTodos, api, token }) => {
         setTodos((prev) => prev.filter(t => t._id !== todoId)); // Optimistically update the UI
 
         try {
-            const res = await fetch(`${api}/todos/${todoId}`, {
+            const res = await fetch(`${api}/api/todos/${todoId}`, {
                 method: "DELETE",
                 headers: {
                     "authorization": `Bearer ${token}`,
@@ -85,7 +85,7 @@ const TaskList = ({ todos, setTodos, fetchTodos, api, token }) => {
         try {
             const todo = todos.filter(t => t._id === todoId);
 
-            const res = await fetch(`${api}/todos/${todoId}`, {
+            const res = await fetch(`${api}/api/todos/${todoId}`, {
                 method: "PATCH",
                 headers: {
                     "content-type": "application/json",

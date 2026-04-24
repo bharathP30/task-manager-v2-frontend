@@ -19,7 +19,7 @@ export default function Taskform({ fetchTodos, setTodos, setShowForm, api, token
         setTodos((prev) => [optimisticTodo, ...prev]); // Optimistically update the UI
 
         try {
-            const res = await fetch(`${api}/todos`, {
+            const res = await fetch(`${api}/api/todos`, {
                 method: "POST",
                 headers: {
                     "content-type": "application/json",
