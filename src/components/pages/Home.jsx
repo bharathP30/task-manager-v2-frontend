@@ -7,7 +7,7 @@ import SearchBar from "./SearchBar";
 import ExpiryModal from "./ExpiryModal";
 import LogoutModal from "./LogoutModal";
 
-const home = ({ api, token, setAuth }) => {
+const Home = ({ api, token, setAuth }) => {
   const [isAuthExpired, setIsAuthExpired] = useState(false);
   const [isWantToLogout, setIsWantToLogout] = useState(false);
 
@@ -104,4 +104,4 @@ const home = ({ api, token, setAuth }) => {
   )
 }
 
-export default home
+export default Home;

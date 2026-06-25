@@ -80,34 +80,54 @@ const TaskList = ({ todos, setTodos, fetchTodos, api, token }) => {
 
     const handleToggle = async ({ todoId }) => {
 
-        setTodos((prev) => prev.map(t => t._id === todoId ? {...t, completed: !t.completed} : t)); // Optimistically update the UI
+    // INFO:  READ FIRST — PREVENT STALE CLOSURE/SNAPSHOT
+    // capture what we need from the current render's snapshot
+    // before anything changes. If we read `todos` later (after setTodos()),
+    // we risk reading a stale snapshot, especially on rapid clicks.
 
-        try {
-            const todo = todos.filter(t => t._id === todoId);
+    const todo = todos.find(t => t._id === todoId);
+    const newCompleted = !todo.completed;
+    // newCompleted is now a plain boolean — not tied to state at all.
+    // No matter what happens to `todos` after this line, newCompleted won't change.
 
-            const res = await fetch(`${api}/api/todos/${todoId}`, {
-                method: "PATCH",
-                headers: {
-                    "content-type": "application/json",
-                    "authorization": `Bearer ${token}`,
-                },
-                body: JSON.stringify({ completed: !todo[0].completed }),
-            })
+    // INFO: OPTIMISTIC UPDATE — schedule the UI change.
+    // We use the already-computed newCompleted instead of !t.completed inside here,
+    // so both the UI update and the server request use the exact same value.
+    setTodos((prev) => prev.map(t => 
+        t._id === todoId ? { ...t, completed: newCompleted } : t
+    ));
 
-            if (!res.ok) {
-                return console.error("error has occured while toggling");
-            }
+    try {
+        const res = await fetch(`${api}/api/todos/${todoId}`, {
+            method: "PATCH",
+            headers: {
+                "content-type": "application/json",
+                "authorization": `Bearer ${token}`,
+            },
+            // Use newCompleted here — NOT !todo.completed or !todos.find(...)
+            // because by this point, `todos` state might be stale
+            // (especially if the user clicked again before this await resolved)
+            body: JSON.stringify({ completed: newCompleted }),
+        });
 
-            const data = await res.json();
-            console.log("toggled todo is, ", data);
-            fetchTodos();
-
-        } catch (err) {
-            console.log(err);
+        if (!res.ok) {
+            // Server rejected the update — revert by fetching real data
             console.error("error has occured while toggling");
-            fetchTodos();  // if server update fails, Revert Optimistic Update by fetching the latest todos from the server
+            fetchTodos();
+            return;
         }
+
+        const data = await res.json();
+        console.log("toggled todo is, ", data);
+        fetchTodos();
+
+    } catch (err) {
+        console.log(err);
+        console.error("error has occured while toggling");
+        // Network failed — revert optimistic update by fetching real data from server
+        fetchTodos();
     }
+}
 
     const getTodoKey = (todo) => todo._id || todo.oId;
 
