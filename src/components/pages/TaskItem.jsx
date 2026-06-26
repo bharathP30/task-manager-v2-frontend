@@ -23,10 +23,7 @@ export default function TaskItem({ todo, onToggle, onDelete, setUpdateData }) {
           <button
             className="px-2 text-lg text-red-500 transition-all duration-300 rounded-md cursor-pointer hover:scale-110"
             onClick={() => {
-              console.log("todo is", todo);
-              if(confirm("Are you sure you want to delete this task?")){
                 onDelete({ todoId: todo._id });
-              }
             }}
           >
             ╳
