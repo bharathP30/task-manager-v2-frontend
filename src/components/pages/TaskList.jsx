@@ -1,7 +1,7 @@
 import { useState } from "react";
 import TaskItem from "./TaskItem";
 import UpdateForm from "./UpdateForm";
-import DeleteModal from "./DeleteModal";
+import DeleteModal from "./DeleteTodoModal";
 import toast from 'react-hot-toast';
 
 const TaskList = ({ todos, setTodos, fetchTodos, api, token }) => {
