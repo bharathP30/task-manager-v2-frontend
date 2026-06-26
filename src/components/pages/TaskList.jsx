@@ -1,10 +1,12 @@
 import { useState } from "react";
 import TaskItem from "./TaskItem";
 import UpdateForm from "./UpdateForm";
+import DeleteModal from "./DeleteModal";
 import toast from 'react-hot-toast';
 
 const TaskList = ({ todos, setTodos, fetchTodos, api, token }) => {
     const [showUpdateForm, setShowUpdateForm] = useState(false);
+     const [deleteTargetId, setDeleteTargetId] = useState(null);
 
     const [updateData, setUpdateData] = useState({
         taskContent: "",
@@ -52,31 +54,36 @@ const TaskList = ({ todos, setTodos, fetchTodos, api, token }) => {
         }
     }
 
-    const handleDelete = async ({ todoId }) => {
+    const confirmDelete = ({ todoId }) => {
+        setDeleteTargetId(todoId); // just open the modal
+    }
 
-        setTodos((prev) => prev.filter(t => t._id !== todoId)); // Optimistically update the UI
+    const handleDelete = async () => {
+        const todoId = deleteTargetId;
+        setDeleteTargetId(null); // close modal immediately
+
+        setTodos((prev) => prev.filter(t => t._id !== todoId));
 
         try {
             const res = await fetch(`${api}/api/todos/${todoId}`, {
                 method: "DELETE",
-                headers: {
-                    "authorization": `Bearer ${token}`,
-                },
-            })
+                headers: { "authorization": `Bearer ${token}` },
+            });
+            const data = await res.json();
 
             if (!res.ok) {
-                toast.error("Server-side error has occured while deleting");
-                console.error(res.error);
+                toast.error(data.error);
                 fetchTodos();
-                return 
+                return;
             }
-            toast.success("Task deleted successfully!");
+
+            toast.success("Task deleted!");
             fetchTodos();
 
         } catch (err) {
             console.error(err.message || err);
-            toast.error("CLient-side error has occured while deleting");
-            fetchTodos();  // if server update fails, Revert Optimistic Update by fetching the latest todos from the server
+            toast.error("Failed to delete task");
+            fetchTodos();
         }
     }
 
@@ -139,7 +146,7 @@ const TaskList = ({ todos, setTodos, fetchTodos, api, token }) => {
             ) : (
 
                 todos.map((todo) => (
-                    <TaskItem key={getTodoKey(todo)} todo={todo} onToggle={handleToggle} onDelete={handleDelete} setUpdateData={handleUpdateForm} /> 
+                    <TaskItem key={getTodoKey(todo)} todo={todo} onToggle={handleToggle} onDelete={confirmDelete} setUpdateData={handleUpdateForm} /> 
                 ))
 
             )}
@@ -149,6 +156,13 @@ const TaskList = ({ todos, setTodos, fetchTodos, api, token }) => {
 
             <UpdateForm handleUpdate={handleUpdate} setShowUpdateForm={setShowUpdateForm} task={updateData} setTask={setUpdateData} />
         )}
+
+        {deleteTargetId && (
+                <DeleteModal
+                    onConfirm={handleDelete}
+                    onCancel={() => setDeleteTargetId(null)}
+                />
+            )}
         </>
     )
 }
