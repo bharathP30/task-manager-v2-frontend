@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 export default function Login({ setAuth, api, setHaveAcc }) {
   const [formData, setFormData] = useState({
@@ -8,7 +9,7 @@ export default function Login({ setAuth, api, setHaveAcc }) {
   });
 
   const handleSubmit = async () => {
-    if (!formData.email.trim() || !formData.password.trim()) return alert("Please enter the login details");
+    if (!formData.email.trim() || !formData.password.trim()) return toast.error("Please enter the login details");
 
     try {
       const res = await fetch(`${api}/api/auth/login`, {
@@ -21,16 +22,18 @@ export default function Login({ setAuth, api, setHaveAcc }) {
       const data = await res.json();
       
       if (!res.ok) {
-        alert(data.error || `Error: ${res.statusText}`);
+        toast.error("Server-side error has occured while Logging in");
         console.error("error is :", data);
         return;
       }
 
-      console.log("fetched data is, ", data);
       setAuth({ token: data.token, user: data.user });
+      console.log("fetched data is, ", data);
+      toast.success("Logged in successfully!");
 
     } catch (err) {
-      console.error("error has occured white submitting", err);
+      toast.error("Client-side error has occurred while logging in.");
+      console.error(err);
     }
 
   }

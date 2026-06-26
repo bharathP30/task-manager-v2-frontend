@@ -6,6 +6,7 @@ import FilterBar from "./FilterBar";
 import SearchBar from "./SearchBar";
 import ExpiryModal from "./ExpiryModal";
 import LogoutModal from "./LogoutModal";
+import toast from 'react-hot-toast';
 
 const Home = ({ api, token, setAuth }) => {
   const [isAuthExpired, setIsAuthExpired] = useState(false);
@@ -50,16 +51,17 @@ const Home = ({ api, token, setAuth }) => {
 
             if (res.status === 401) {
               setIsAuthExpired(true);
-              return console.error(data.error);
+              toast.error("Your session has expired. Please log in again.");
+              console.error(res.statusText || data.error);
+              return
 
             }
             
-            console.log("fetched todos are, ", data);
             setTodos([...data]);
 
         } catch (err) {
-            console.log(err);
-            console.error("error has occured while fetching");
+            console.error(err);
+            toast.error("Server-side error has occured while fetching");
         }
     }
 

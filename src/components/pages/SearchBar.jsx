@@ -1,7 +1,6 @@
 
 export default function Searchbar ({searchterm, onSearchChange, statusFilter, onStatusChange}) {
 
-
     return (
         <div className="flex w-full p-2 border rounded-md bg-gray-400/20 border-white/10 backdrop-blur-lg md:max-w-xl md:mx-auto md:space-x-2 ">
                     

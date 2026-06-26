@@ -1,6 +1,7 @@
 import { useState } from "react";
 import TaskItem from "./TaskItem";
 import UpdateForm from "./UpdateForm";
+import toast from 'react-hot-toast';
 
 const TaskList = ({ todos, setTodos, fetchTodos, api, token }) => {
     const [showUpdateForm, setShowUpdateForm] = useState(false);
@@ -21,6 +22,7 @@ const TaskList = ({ todos, setTodos, fetchTodos, api, token }) => {
     }
 
     const handleUpdate = async ({ todoId }) => {
+
         setTodos((prev) => prev.map(t => t._id === todoId ? updateData : t)); // Optimistically update the UI
 
         try {
@@ -33,19 +35,19 @@ const TaskList = ({ todos, setTodos, fetchTodos, api, token }) => {
                 },
                 body: JSON.stringify(updateData),
             })
-            const data = await res.json();
 
             if (!res.ok) {
-                console.error("error has occured while updating", data.error);
+                toast.error("Server-side error has occured while updating");
+                console.error(res.error);
+                fetchTodos();
                 return;
             }
-
-            console.log("updated data is, ", data);
+            toast.success("Task updated successfully!");
             fetchTodos();
             
         } catch (err) {
-            console.log(err);
-            console.error("error has occured while updating");
+            toast.error("Client-side error has occured while updating");
+            console.error(err.message || err);
             fetchTodos();  // if server update fails, Revert Optimistic Update by fetching the latest todos from the server
         }
     }
@@ -61,19 +63,19 @@ const TaskList = ({ todos, setTodos, fetchTodos, api, token }) => {
                     "authorization": `Bearer ${token}`,
                 },
             })
-            const data = await res.json();
 
             if (!res.ok) {
-                alert(data.error);
-                return console.error(data.error);
+                toast.error("Server-side error has occured while deleting");
+                console.error(res.error);
+                fetchTodos();
+                return 
             }
-
-            console.log("deleted todo is, ", data);
+            toast.success("Task deleted successfully!");
             fetchTodos();
 
         } catch (err) {
-            console.log(err);
-            console.error("error has occured while deleting");
+            console.error(err.message || err);
+            toast.error("CLient-side error has occured while deleting");
             fetchTodos();  // if server update fails, Revert Optimistic Update by fetching the latest todos from the server
         }
     }
@@ -112,18 +114,16 @@ const TaskList = ({ todos, setTodos, fetchTodos, api, token }) => {
 
         if (!res.ok) {
             // Server rejected the update — revert by fetching real data
-            console.error("error has occured while toggling");
+            toast.error("Server-side error has occured while toggling");
+            console.error(res.error)
             fetchTodos();
             return;
         }
-
-        const data = await res.json();
-        console.log("toggled todo is, ", data);
         fetchTodos();
 
     } catch (err) {
-        console.log(err);
-        console.error("error has occured while toggling");
+        console.log(err.message || err);
+        toast.error("CLient-side error has occured while toggling");
         // Network failed — revert optimistic update by fetching real data from server
         fetchTodos();
     }

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 export default function Taskform({ fetchTodos, setTodos, setShowForm, api, token }) {
     const [task, setTask] = useState({
@@ -27,22 +28,25 @@ export default function Taskform({ fetchTodos, setTodos, setShowForm, api, token
                 },
                 body: JSON.stringify(task),
             });
+
             const data = await res.json();
 
             if (!res.ok) {
                 // Remove optimistic todo on error
-                //fetchTodos(); // Alternatively, you can refetch the todos to get the correct state from the server
+                //fetchTodos(); // you can refetch the todos to get the correct state from the server
+                
+                // Alternatively, you can just remove this optimistic todo from the state instead of refetching everythig
                 setTodos((prev) => prev.filter(t => t.oId !== task.oId));
-                alert(data.error || "Failed to create todo");
+                toast.error("Failed to create todo, Server-side error has occured while creating");
                 return;
             }
 
-             // Replace temp todo with real one from server
+             // Replace temp todo with real one from server, instead of refetching all todos
             setTodos((prev) => prev.map(t => 
                 t.oId === task.oId ? data : t
             ));
 
-            console.log("Todo created", data);
+            toast.success("Todo created successfully!");
             
             // INFO: fetchTodos(); 
             // // No need to refetch since we already have the new todo from the response
@@ -68,8 +72,9 @@ export default function Taskform({ fetchTodos, setTodos, setShowForm, api, token
             setShowForm(false);
             
         } catch (error) {
-            console.error("Error while submitting todo", error);
-            fetchTodos();  // if server update fails, Revert Optimistic Update by fetching the latest todos from the server
+            console.error(error);
+            toast.error("Server-side error while submitting todo");
+            fetchTodos();  
         }
 
     };

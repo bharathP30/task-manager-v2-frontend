@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 export default function UpdateForm({ handleUpdate, setShowUpdateForm, task, setTask }) {
     const handleSubmit = (e) => {
         e.preventDefault();
