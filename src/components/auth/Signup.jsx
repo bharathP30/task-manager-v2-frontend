@@ -33,8 +33,8 @@ export default function Signup({ setAuth, api, setHaveAcc }) {
       setAuth({ token: data.token, user: data.user });
 
     } catch (err) {
-      console.log(err);
-      console.error("error has occured white submitting");
+      toast.error("Client-side error has occurred while signing in.");
+      console.error(err);
     }
 
   }

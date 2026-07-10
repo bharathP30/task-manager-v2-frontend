@@ -24,6 +24,7 @@ const TaskList = ({ todos, setTodos, fetchTodos, api, token }) => {
 
     const handleUpdate = async ({ todoId }) => {
 
+        const previousTodo = todos.find(t => t._id === todoId);
         setTodos((prev) => prev.map(t => t._id === todoId ? updateData : t)); // Optimistically update the UI
 
         try {
@@ -41,11 +42,11 @@ const TaskList = ({ todos, setTodos, fetchTodos, api, token }) => {
             if (!res.ok) {
                 toast.error("Server-side error has occured while updating");
                 console.error(res.error);
-                setTodos((prev) => prev.filter(t => t.oId !== todoId));
+                setTodos((prev) => prev.filter(t => t._Id === todoId ? previousTodo : t));
                 return;
             }
             toast.success("Task updated successfully!");
-            setTodos((prev) => prev.map((t) => t.id === todoId ? data : t ));
+            setTodos((prev) => prev.map((t) => t._id === todoId ? data : t ));
             
         } catch (err) {
             toast.error("Client-side error has occured while updating");
@@ -61,6 +62,7 @@ const TaskList = ({ todos, setTodos, fetchTodos, api, token }) => {
     const handleDelete = async () => {
         const todoId = deleteTargetId;
         setDeleteTargetId(null); // close modal immediately
+        const deletedTodo = todos.find(t => t._id === todoId);
 
         setTodos((prev) => prev.filter(t => t._id !== todoId));
 
@@ -73,7 +75,7 @@ const TaskList = ({ todos, setTodos, fetchTodos, api, token }) => {
 
             if (!res.ok) {
                 toast.error(data.error);
-                setTodos((prev) => prev.map((t) => t.id === todoId? data : t));
+                setTodos((prev) => [deletedTodo, ...prev]);
                 return;
             }
 
@@ -84,7 +86,7 @@ const TaskList = ({ todos, setTodos, fetchTodos, api, token }) => {
         } catch (err) {
             console.error(err.message || err);
             toast.error("Failed to delete task");
-            fetchTodos();
+            setTodos((prev) => [deletedTodo, ...prev]);
         }
     }
 
