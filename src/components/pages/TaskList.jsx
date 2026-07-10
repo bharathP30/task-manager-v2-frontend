@@ -16,7 +16,6 @@ const TaskList = ({ todos, setTodos, fetchTodos, api, token }) => {
         completed: false,
     })
     const handleUpdateForm = ({ todo }) => {
-        console.log(todo);
         if(todo) {
             setUpdateData({...todo});
         }
@@ -36,16 +35,17 @@ const TaskList = ({ todos, setTodos, fetchTodos, api, token }) => {
                     "authorization": `Bearer ${token}`,
                 },
                 body: JSON.stringify(updateData),
-            })
+            });
+            const data = await res.json();
 
             if (!res.ok) {
                 toast.error("Server-side error has occured while updating");
                 console.error(res.error);
-                fetchTodos();
+                setTodos((prev) => prev.filter(t => t.oId !== todoId));
                 return;
             }
             toast.success("Task updated successfully!");
-            fetchTodos();
+            setTodos((prev) => prev.map((t) => t.id === todoId ? data : t ));
             
         } catch (err) {
             toast.error("Client-side error has occured while updating");
@@ -73,12 +73,13 @@ const TaskList = ({ todos, setTodos, fetchTodos, api, token }) => {
 
             if (!res.ok) {
                 toast.error(data.error);
-                fetchTodos();
+                setTodos((prev) => prev.map((t) => t.id === todoId? data : t));
                 return;
             }
 
             toast.success("Task deleted!");
-            fetchTodos();
+            // INFO: since the optimistic state already does not have the deleted todo, there is no need to fetch from the server on success case
+            // INFO: only do it if deletion fails i.e., res.ok === false
 
         } catch (err) {
             console.error(err.message || err);
@@ -123,10 +124,12 @@ const TaskList = ({ todos, setTodos, fetchTodos, api, token }) => {
             // Server rejected the update — revert by fetching real data
             toast.error("Server-side error has occured while toggling");
             console.error(res.error)
-            fetchTodos();
+            setTodos((prev) => prev.map(t => 
+                t._id === todoId ? { ...t, completed: todo.completed } : t
+            ));
             return;
         }
-        fetchTodos();
+        // no need to fetch here too, on success case, since optimistic update has already taken care of the state
 
     } catch (err) {
         console.log(err.message || err);

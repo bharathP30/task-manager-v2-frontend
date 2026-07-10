@@ -8,9 +8,13 @@ export default function App() {
   const BASE_API = import.meta.env.VITE_API_URL;
 
   if (!auth) {
-    <Toaster position="top-right" />
-    return <Auth setAuth={setAuth} api={BASE_API} />
-  }
+   return ( 
+    <>
+      <Toaster position="top-right" />
+      <Auth setAuth={setAuth} api={BASE_API} /> 
+    </>
+  )
+}
 
   return (
     <>

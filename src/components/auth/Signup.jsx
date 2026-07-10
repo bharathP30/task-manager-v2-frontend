@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 export default function Signup({ setAuth, api, setHaveAcc }) {
   const [formData, setFormData] = useState({
@@ -10,7 +11,7 @@ export default function Signup({ setAuth, api, setHaveAcc }) {
 
 
   const handleSubmit = async () => {
-    if (!formData.email.trim() || !formData.password.trim() || !formData.name.trim()) return alert("Please enter the login details");
+    if (!formData.email.trim() || !formData.password.trim() || !formData.name.trim()) return toast.error("Please enter the login details");
 
     try {
       console.log("running handleSubmit");
@@ -24,8 +25,9 @@ export default function Signup({ setAuth, api, setHaveAcc }) {
 
       const data = await res.json();
       if (!res.ok) {
-        alert(data.error);
-        return console.error(data.error);
+        toast.error(data.error || "Something went wrong in the server")
+        console.error(data.error);
+        return;
       }
       console.log("fetched data is, ", data);
       setAuth({ token: data.token, user: data.user });

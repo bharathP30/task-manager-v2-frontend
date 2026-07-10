@@ -23,8 +23,6 @@ const Home = ({ api, token, setAuth }) => {
     let url = `${api}/api/todos`;
     const params = new URLSearchParams();
 
-    console.log("filters are, ", filterCat, filterPrio, filterStatus, searchTerm);
-    
     if (filterCat !== "") params.append("category", filterCat);
     if (filterPrio !== "") params.append("priority", filterPrio);
     if (filterStatus !== "") params.append("completed", filterStatus);
@@ -34,7 +32,6 @@ const Home = ({ api, token, setAuth }) => {
     if (params.toString()) {
       url += `/filter?${params.toString()}`;
     }
-    console.log("URl is, ", url);
     return url;
   };
 
@@ -53,10 +50,8 @@ const Home = ({ api, token, setAuth }) => {
               setIsAuthExpired(true);
               toast.error("Your session has expired. Please log in again.");
               console.error(res.statusText || data.error);
-              return
-
+              return;
             }
-            
             setTodos([...data]);
 
         } catch (err) {
@@ -81,7 +76,7 @@ const Home = ({ api, token, setAuth }) => {
   return (
     <>
       <div className="flex flex-col justify-start px-4 pb-4 m-0 overflow-hidden h-dvh min-w-dvw bg-linear-to-br from-black via-purple-950 to-black">
-        <Header isWantToLogout={setIsWantToLogout} />
+        <Header setIsWantToLogout={setIsWantToLogout} />
         <SearchBar searchterm={searchTerm} onSearchChange={setSearchTerm} statusFilter={filterStatus} onStatusChange={setFilterStatus}/>
       
         <div className="flex items-center justify-center max-w-3xl gap-4 p-2 mx-auto">

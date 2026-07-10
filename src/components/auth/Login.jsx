@@ -22,13 +22,12 @@ export default function Login({ setAuth, api, setHaveAcc }) {
       const data = await res.json();
       
       if (!res.ok) {
-        toast.error("Server-side error has occured while Logging in");
+        toast.error(data.error || "Something went wrong in the server");
         console.error("error is :", data);
         return;
       }
 
       setAuth({ token: data.token, user: data.user });
-      console.log("fetched data is, ", data);
       toast.success("Logged in successfully!");
 
     } catch (err) {

@@ -142,7 +142,7 @@ export default function Taskform({ fetchTodos, setTodos, setShowForm, api, token
                 onClick={() => setShowForm(false)}
                 className={`text-md w-1/3 mt-4 text-center p-2 rounded-md  flex-1 
                             transition-all duration-200 md:mt-8
-                        bg-gray-500 cursor-not-allowed text-gray-700`
+                        bg-gray-500 text-gray-700`
                         }
             >
                 Cancel
