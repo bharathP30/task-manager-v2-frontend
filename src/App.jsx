@@ -5,13 +5,12 @@ import useAuth from "./components/functions/useAuth.js";
 
 export default function App() {
   const [auth, setAuth] = useAuth();
-  const BASE_API = import.meta.env.VITE_API_URL;
 
   if (!auth) {
    return ( 
     <>
       <Toaster position="top-right" />
-      <Auth setAuth={setAuth} api={BASE_API} /> 
+      <Auth setAuth={setAuth} /> 
     </>
   )
 }
@@ -19,7 +18,7 @@ export default function App() {
   return (
     <>
       <Toaster position="top-right" />
-      <Home api={BASE_API} token={auth.token} setAuth={setAuth} />
+      <Home token={auth.token} setAuth={setAuth} />
     </>
   )
 }

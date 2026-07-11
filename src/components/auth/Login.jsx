@@ -1,7 +1,8 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
+import apiRequestHelper from "../../api";
 
-export default function Login({ setAuth, api, setHaveAcc }) {
+export default function Login({ setAuth, setHaveAcc }) {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -12,27 +13,16 @@ export default function Login({ setAuth, api, setHaveAcc }) {
     if (!formData.email.trim() || !formData.password.trim()) return toast.error("Please enter the login details");
 
     try {
-      const res = await fetch(`${api}/api/auth/login`, {
+      const data = await apiRequestHelper(`/api/auth/login`, {
         method: "POST",
-        headers: {
-          "content-type": "application/json",
-        },
-        body: JSON.stringify(formData),
+        body: formData,
       })
-      const data = await res.json();
       
-      if (!res.ok) {
-        toast.error(data.error || "Something went wrong in the server");
-        console.error("error is :", data);
-        return;
-      }
-
       setAuth({ token: data.token, user: data.user });
       toast.success("Logged in successfully!");
 
     } catch (err) {
-      toast.error("Client-side error has occurred while logging in.");
-      console.error(err);
+      toast.error(`Failed to Login, ${err.message}`);
     }
 
   }

@@ -7,6 +7,7 @@ import SearchBar from "./SearchBar";
 import ExpiryModal from "./ExpiryModal";
 import LogoutModal from "./LogoutModal";
 import toast from 'react-hot-toast';
+import {apiRequestHelper, ApiError } from "../../api";
 
 const Home = ({ api, token, setAuth }) => {
   const [isAuthExpired, setIsAuthExpired] = useState(false);
@@ -20,7 +21,7 @@ const Home = ({ api, token, setAuth }) => {
   const [filterStatus, setFilterStatus] = useState("");
 
   const buildFilterURL = () => {
-    let url = `${api}/api/todos`;
+    let url = `/api/todos`;
     const params = new URLSearchParams();
 
     if (filterCat !== "") params.append("category", filterCat);
@@ -38,25 +39,28 @@ const Home = ({ api, token, setAuth }) => {
     const fetchTodos = async () => {
         try {
             const url = buildFilterURL();
-            const res = await fetch(url, {
-                headers: {
-                    "content-type": "application/json",
-                    "authorization": `Bearer ${token}`,
-                },
-            })
-            const data = await res.json();
+            const data = await apiRequestHelper(url, { token });
+            setTodos(data);
 
-            if (res.status === 401) {
+            // if(!res.ok){
+            //   if (res.status === 401) {
+            //     setIsAuthExpired(true);
+            //     toast.error("Your session has expired. Please log in again.");
+            //   } else {
+            //     toast.error("Failed to fetch todos")
+            //   }
+            //   console.error(res.statusText || data.error);
+            //   return;
+            // }
+            
+        } catch (err) {
+          if (err instanceof ApiError && err.status === 401) {
               setIsAuthExpired(true);
               toast.error("Your session has expired. Please log in again.");
-              console.error(res.statusText || data.error);
-              return;
-            }
-            setTodos([...data]);
-
-        } catch (err) {
-            console.error(err);
-            toast.error("Server-side error has occured while fetching");
+          } else {
+              toast.error("Failed to fetch todos");
+          }
+            console.error(err.message);
         }
     }
 
@@ -87,7 +91,7 @@ const Home = ({ api, token, setAuth }) => {
         
         <TaskList todos={todos} setTodos={setTodos} fetchTodos={fetchTodos} api={api} token={token}  />
         
-        { showForm && (<Taskform fetchTodos={fetchTodos} setTodos={setTodos} setShowForm={setShowForm} api={api} token={token} />)
+        { showForm && (<Taskform fetchTodos={fetchTodos} setTodos={setTodos} setShowForm={setShowForm} token={token} />)
         }
 
         {

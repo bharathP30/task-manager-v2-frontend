@@ -3,8 +3,9 @@ import TaskItem from "./TaskItem";
 import UpdateForm from "./UpdateForm";
 import DeleteModal from "./DeleteTodoModal";
 import toast from 'react-hot-toast';
+import apiRequestHelper from "../../api";
 
-const TaskList = ({ todos, setTodos, fetchTodos, api, token }) => {
+const TaskList = ({ todos, setTodos, token }) => {
     const [showUpdateForm, setShowUpdateForm] = useState(false);
      const [deleteTargetId, setDeleteTargetId] = useState(null);
 
@@ -15,6 +16,7 @@ const TaskList = ({ todos, setTodos, fetchTodos, api, token }) => {
         dueDate: "",
         completed: false,
     })
+
     const handleUpdateForm = ({ todo }) => {
         if(todo) {
             setUpdateData({...todo});
@@ -23,35 +25,21 @@ const TaskList = ({ todos, setTodos, fetchTodos, api, token }) => {
     }
 
     const handleUpdate = async ({ todoId }) => {
-
         const previousTodo = todos.find(t => t._id === todoId);
         setTodos((prev) => prev.map(t => t._id === todoId ? updateData : t)); // Optimistically update the UI
 
         try {
-            const res = await fetch(`${api}/api/todos/${todoId}`, {
+            const data = await apiRequestHelper(`/api/todos/${todoId}`, {
                 method: "PATCH",
-                headers: {
-                    "content-type": "application/json",
-                    // include authorization if required by backend
-                    "authorization": `Bearer ${token}`,
-                },
-                body: JSON.stringify(updateData),
+                token,
+                body: updateData,
             });
-            const data = await res.json();
-
-            if (!res.ok) {
-                toast.error("Server-side error has occured while updating");
-                console.error(res.error);
-                setTodos((prev) => prev.filter(t => t._Id === todoId ? previousTodo : t));
-                return;
-            }
             toast.success("Task updated successfully!");
             setTodos((prev) => prev.map((t) => t._id === todoId ? data : t ));
             
         } catch (err) {
-            toast.error("Client-side error has occured while updating");
-            console.error(err.message || err);
-            fetchTodos();  // if server update fails, Revert Optimistic Update by fetching the latest todos from the server
+                toast.error(`Failed to update todo, ${err.message}`);
+                setTodos((prev) => prev.filter(t => t._Id === todoId ? previousTodo : t));  // if server update fails, Revert Optimistic Update by fetching the latest todos from the server
         }
     }
 
@@ -67,77 +55,54 @@ const TaskList = ({ todos, setTodos, fetchTodos, api, token }) => {
         setTodos((prev) => prev.filter(t => t._id !== todoId));
 
         try {
-            const res = await fetch(`${api}/api/todos/${todoId}`, {
+            const data = await fetch(`/api/todos/${todoId}`, {
                 method: "DELETE",
-                headers: { "authorization": `Bearer ${token}` },
+                token,
             });
-            const data = await res.json();
-
-            if (!res.ok) {
-                toast.error(data.error);
-                setTodos((prev) => [deletedTodo, ...prev]);
-                return;
-            }
-
             toast.success("Task deleted!");
-            // INFO: since the optimistic state already does not have the deleted todo, there is no need to fetch from the server on success case
-            // INFO: only do it if deletion fails i.e., res.ok === false
-
+             
         } catch (err) {
             console.error(err.message || err);
-            toast.error("Failed to delete task");
+            toast.error(`Failed to delete task, ${err.error}`);
             setTodos((prev) => [deletedTodo, ...prev]);
         }
     }
 
     const handleToggle = async ({ todoId }) => {
 
-    // INFO:  READ FIRST — PREVENT STALE CLOSURE/SNAPSHOT
-    // capture what we need from the current render's snapshot
-    // before anything changes. If we read `todos` later (after setTodos()),
-    // we risk reading a stale snapshot, especially on rapid clicks.
+        // INFO:  READ STATE FIRST — PREVENT STALE CLOSURE/SNAPSHOT
+            // capture what we need from the current render's snapshot
+            // before anything changes. If we read `todos` later (after setTodos()),
+            // we risk reading a stale snapshot, especially on rapid clicks.
 
     const todo = todos.find(t => t._id === todoId);
     const newCompleted = !todo.completed;
-    // newCompleted is now a plain boolean — not tied to state at all.
-    // No matter what happens to `todos` after this line, newCompleted won't change.
+            // newCompleted is now a plain boolean — not tied to state at all.
+            // No matter what happens to `todos` after this line, newCompleted won't change.
 
-    // INFO: OPTIMISTIC UPDATE — schedule the UI change.
-    // We use the already-computed newCompleted instead of !t.completed inside here,
-    // so both the UI update and the server request use the exact same value.
-    setTodos((prev) => prev.map(t => 
-        t._id === todoId ? { ...t, completed: newCompleted } : t
-    ));
+        // INFO: OPTIMISTIC UPDATE — schedule the UI change.
+            // We use the already-computed newCompleted instead of !t.completed inside here,
+            // so both the UI update and the server request use the exact same value.
+    setTodos((prev) => prev.map(t =>
+        t._id === todoId ?
+        { ...t, completed: newCompleted } : t));
 
     try {
-        const res = await fetch(`${api}/api/todos/${todoId}`, {
+        const data = await fetch(`/api/todos/${todoId}`, {
             method: "PATCH",
-            headers: {
-                "content-type": "application/json",
-                "authorization": `Bearer ${token}`,
-            },
+            token,
             // Use newCompleted here — NOT !todo.completed or !todos.find(...)
             // because by this point, `todos` state might be stale
-            // (especially if the user clicked again before this await resolved)
-            body: JSON.stringify({ completed: newCompleted }),
+            // especially if the user clicked again before this await resolved
+            body: { completed: newCompleted },
         });
 
-        if (!res.ok) {
-            // Server rejected the update — revert by fetching real data
-            toast.error("Server-side error has occured while toggling");
-            console.error(res.error)
-            setTodos((prev) => prev.map(t => 
-                t._id === todoId ? { ...t, completed: todo.completed } : t
-            ));
-            return;
-        }
-        // no need to fetch here too, on success case, since optimistic update has already taken care of the state
-
     } catch (err) {
-        console.log(err.message || err);
-        toast.error("CLient-side error has occured while toggling");
-        // Network failed — revert optimistic update by fetching real data from server
-        fetchTodos();
+        toast.error(`Failed to toggle todo, ${err.message}`);
+          setTodos((prev) => prev.map(t => 
+                t._id === todoId ? 
+                { ...t, completed: todo.completed } : t
+            ));
     }
 }
 

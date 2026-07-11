@@ -1,7 +1,8 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
+import apiRequestHelper from "../../api";
 
-export default function Taskform({ fetchTodos, setTodos, setShowForm, api, token }) {
+export default function Taskform({ setTodos, setShowForm, token }) {
     const [task, setTask] = useState({
         oId: crypto.randomUUID(), // temporary id until we get the real id from the server; helps with optimistic UI update
         taskContent: "",
@@ -14,52 +15,20 @@ export default function Taskform({ fetchTodos, setTodos, setShowForm, api, token
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (task.taskContent.trim().length === 0) return;
+        if (task.taskContent.trim().length === 0) return toast.error("Please, enter task content");
 
         const optimisticTodo = { ...task };
         setTodos((prev) => [optimisticTodo, ...prev]); // Optimistically update the UI
 
         try {
-            const res = await fetch(`${api}/api/todos`, {
+            const data = await apiRequestHelper(`/api/todos`, {
                 method: "POST",
-                headers: {
-                    "content-type": "application/json",
-                    "authorization": `Bearer ${token}`,
-                },
-                body: JSON.stringify(task),
+                token,
+                body: task,
             });
 
-            const data = await res.json();
-
-            if (!res.ok) {
-                // Remove optimistic todo on error
-                //fetchTodos(); // you can refetch the todos to get the correct state from the server
-                
-                // Alternatively, you can just remove this optimistic todo from the state instead of refetching everythig
-                setTodos((prev) => prev.filter(t => t.oId !== task.oId));
-                toast.error("Failed to create todo, Server-side error has occured while creating");
-                return;
-            }
-
-             // Replace temp todo with real one from server, instead of refetching all todos
-            setTodos((prev) => prev.map(t => 
-                t.oId === task.oId ? data : t
-            ));
-
+            setTodos((prev) => prev.map(t => t.oId === task.oId ? data : t ));
             toast.success("Todo created successfully!");
-            
-            // INFO: fetchTodos(); 
-            // // No need to refetch since we already have the new todo from the response
-            /* 
-            Instead of two fetchTodos() calls (which would be 2 GET requests to refetch all todos)
-            I am using two local setTodos() updates 
-            - one to optimistically add the new todo, 
-            and another to replace it with the real data from the server once we get the response. 
-            This way we avoid an extra GET request and make the UI feel more responsive.
-            */
-
-
-            // reset the form
             setTask({
                 oId: crypto.randomUUID(), // renew the temporary ID for the next task
                 taskContent: "",
@@ -72,11 +41,9 @@ export default function Taskform({ fetchTodos, setTodos, setShowForm, api, token
             setShowForm(false);
             
         } catch (error) {
-            console.error(error);
-            toast.error("Server-side error while submitting todo");
-            fetchTodos();  
+                 setTodos((prev) => prev.filter(t => t.oId !== task.oId));
+                toast.error(`Failed to create todo, ${error.message}`)
         }
-
     };
 
     const optionStyles = "font-mono bg-black/90 text-white/80" ;
