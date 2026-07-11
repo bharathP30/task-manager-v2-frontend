@@ -41,17 +41,6 @@ const Home = ({ api, token, setAuth }) => {
             const url = buildFilterURL();
             const data = await apiRequestHelper(url, { token });
             setTodos(data);
-
-            // if(!res.ok){
-            //   if (res.status === 401) {
-            //     setIsAuthExpired(true);
-            //     toast.error("Your session has expired. Please log in again.");
-            //   } else {
-            //     toast.error("Failed to fetch todos")
-            //   }
-            //   console.error(res.statusText || data.error);
-            //   return;
-            // }
             
         } catch (err) {
           if (err instanceof ApiError && err.status === 401) {

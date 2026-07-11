@@ -9,10 +9,10 @@ export class ApiError extends Error {
 
 const BASE_API = import.meta.env.VITE_API_URL;
 
-export default async function apiRequestHelper (path, { method = "GET", token, body } = {} ) {
+export async function apiRequestHelper (path, { method = "GET", token, body } = {} ) {
     const url = `${BASE_API}${path}`;
 
-    const res = fetch(url, {
+    const res = await fetch(url, {
         method,
         headers: {
             "content-type": "application/json",
@@ -21,9 +21,9 @@ export default async function apiRequestHelper (path, { method = "GET", token, b
         ...(body && { body: JSON.stringify(body)})
     })
 
-    const data = res.json();
+    const data = await res.json();
 
-    if(!res.ok) throw new ApiError(data.error || "Something went wrong");
+    if(!res.ok) throw new ApiError(data.error || "Something went wrong", res.status);
 
     return data;
 }
