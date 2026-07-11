@@ -3,7 +3,7 @@ import TaskItem from "./TaskItem";
 import UpdateForm from "./UpdateForm";
 import DeleteModal from "./DeleteTodoModal";
 import toast from 'react-hot-toast';
-import apiRequestHelper from "../../api";
+import { apiRequestHelper } from "../../api";
 
 const TaskList = ({ todos, setTodos, token }) => {
     const [showUpdateForm, setShowUpdateForm] = useState(false);

@@ -7,7 +7,7 @@ import SearchBar from "./SearchBar";
 import ExpiryModal from "./ExpiryModal";
 import LogoutModal from "./LogoutModal";
 import toast from 'react-hot-toast';
-import {apiRequestHelper, ApiError } from "../../api";
+import { apiRequestHelper, ApiError } from "../../api";
 
 const Home = ({ api, token, setAuth }) => {
   const [isAuthExpired, setIsAuthExpired] = useState(false);
