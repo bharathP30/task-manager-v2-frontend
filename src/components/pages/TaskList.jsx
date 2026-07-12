@@ -112,22 +112,26 @@ const TaskList = ({ flags = {}, todos, setTodos, token }) => {
 
     return (
         <>
-            <div className='flex-1 w-full h-full max-h-screen p-4 mb-4 space-y-2 overflow-y-auto font-sans text-center text-white border rounded-lg bg-linear-to-b from-black/30 to-black/40 bg-black/40 border-white/20 backdrop-blur-lg md:mx-auto md:max-w-3xl md:p-8 md:text-lg'>
-            {isLoading && todos.length === 0 ? (
-                <p className="text-xs text-gray-500 font-mono">
-                    {isSlow ? "this can take up to a minute…" : "Loading your tasks…"}
-                </p>
-                ) : (
-                    todos.length === 0 ? (
-                        <p className="text-xs text-gray-500 font-mono">No tasks yet</p>
-                    ) : (
-                        todos.map((todo) => (
-                            <TaskItem key={getTodoKey(todo)} todo={todo} onToggle={handleToggle} onDelete={confirmDelete} setUpdateData={handleUpdateForm} />
-                        ))
-                    )
-                )
-            }
-        </div>
+            <div className="flex-1 w-full h-full max-h-screen p-4 mb-4 space-y-2 overflow-y-auto font-sans text-center text-white border rounded-lg bg-linear-to-b from-black/30 to-black/40 bg-black/40 border-white/20 backdrop-blur-lg md:mx-auto md:max-w-3xl md:p-8 md:text-lg">
+  {isLoading && todos.length === 0 ? (
+    <p className="text-xs text-gray-500 font-mono">
+      {isSlow ? "this can take up to a minute…" : "Loading your tasks…"}
+    </p>
+  ) : todos.length === 0 ? (
+    <p className="text-xs text-gray-500 font-mono">No tasks yet</p>
+  ) : (
+    todos.map((todo) => (
+      <TaskItem
+        key={getTodoKey(todo)}
+        todo={todo}
+        onToggle={handleToggle}
+        onDelete={confirmDelete}
+        setUpdateData={handleUpdateForm}
+      />
+    ))
+  )}
+</div>
+
 
         {showUpdateForm && (
 
