@@ -12,9 +12,9 @@ export default function App() {
       <Toaster position="top-right" />
       <Auth setAuth={setAuth} /> 
     </>
-  )
-}
-
+    )
+  }
+  
   return (
     <>
       <Toaster position="top-right" />
@@ -22,5 +22,3 @@ export default function App() {
     </>
   )
 }
-
-

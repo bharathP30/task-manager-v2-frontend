@@ -55,7 +55,7 @@ const TaskList = ({ todos, setTodos, token }) => {
         setTodos((prev) => prev.filter(t => t._id !== todoId));
 
         try {
-            await fetch(`/api/todos/${todoId}`, {
+            await apiRequestHelper(`/api/todos/${todoId}`, {
                 method: "DELETE",
                 token,
             });
@@ -88,7 +88,7 @@ const TaskList = ({ todos, setTodos, token }) => {
         { ...t, completed: newCompleted } : t));
 
     try {
-        await fetch(`/api/todos/${todoId}`, {
+        await apiRequestHelper(`/api/todos/${todoId}`, {
             method: "PATCH",
             token,
             // Use newCompleted here — NOT !todo.completed or !todos.find(...)
