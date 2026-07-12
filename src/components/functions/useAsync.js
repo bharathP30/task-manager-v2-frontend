@@ -11,7 +11,7 @@ export default function useAsync() {
         timerRef.current = setTimeout(() => setIsSlow(true), delayMs);
         
         try{
-            await func();
+            return await func();
         } finally {
             clearTimeout(timerRef.current);
             setIsLoading(false);
