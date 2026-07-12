@@ -5,9 +5,10 @@ import DeleteModal from "./DeleteTodoModal";
 import toast from 'react-hot-toast';
 import { apiRequestHelper } from "../../api";
 
-const TaskList = ({ todos, setTodos, token }) => {
+const TaskList = ({ flags = {}, todos, setTodos, token }) => {
+    const { isLoading, isSlow } = flags;
     const [showUpdateForm, setShowUpdateForm] = useState(false);
-     const [deleteTargetId, setDeleteTargetId] = useState(null);
+    const [deleteTargetId, setDeleteTargetId] = useState(null);
 
     const [updateData, setUpdateData] = useState({
         taskContent: "",
@@ -38,8 +39,9 @@ const TaskList = ({ todos, setTodos, token }) => {
             setTodos((prev) => prev.map((t) => t._id === todoId ? data : t ));
             
         } catch (err) {
-                toast.error(`Failed to update todo, ${err.message}`);
-                setTodos((prev) => prev.filter(t => t._Id === todoId ? previousTodo : t));  // if server update fails, Revert Optimistic Update by fetching the latest todos from the server
+            toast.error(`Failed to update todo, ${err.message}`);
+            // if server update fails, revert optimistic update
+            setTodos((prev) => prev.map(t => t._id === todoId ? previousTodo : t));
         }
     }
 
@@ -111,15 +113,20 @@ const TaskList = ({ todos, setTodos, token }) => {
     return (
         <>
             <div className='flex-1 w-full h-full max-h-screen p-4 mb-4 space-y-2 overflow-y-auto font-sans text-center text-white border rounded-lg bg-linear-to-b from-black/30 to-black/40 bg-black/40 border-white/20 backdrop-blur-lg md:mx-auto md:max-w-3xl md:p-8 md:text-lg'>
-            {todos.length === 0 ? (
-                <p className="my-16 text-white/40"> No Todos yet!</p>
-            ) : (
-
-                todos.map((todo) => (
-                    <TaskItem key={getTodoKey(todo)} todo={todo} onToggle={handleToggle} onDelete={confirmDelete} setUpdateData={handleUpdateForm} /> 
-                ))
-
-            )}
+            {isLoading && todos.length === 0 ? (
+                <p className="text-xs text-gray-500 font-mono">
+                    {isSlow ? "this can take up to a minute…" : "Loading your tasks…"}
+                </p>
+                ) : (
+                    todos.length === 0 ? (
+                        <p className="text-xs text-gray-500 font-mono">No tasks yet</p>
+                    ) : (
+                        todos.map((todo) => (
+                            <TaskItem key={getTodoKey(todo)} todo={todo} onToggle={handleToggle} onDelete={confirmDelete} setUpdateData={handleUpdateForm} />
+                        ))
+                    )
+                )
+            }
         </div>
 
         {showUpdateForm && (
@@ -136,5 +143,4 @@ const TaskList = ({ todos, setTodos, token }) => {
         </>
     )
 }
-
 export default TaskList

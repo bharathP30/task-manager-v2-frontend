@@ -2,6 +2,11 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { apiRequestHelper } from "../../api";
 
+// there probably is no need to use the useAsync function here for the CRUD features, since by the time that the user
+// makes these requests, the server probably is already guanranteed to be be warm and running
+// login, signup and initial fetchtodos() is not, there are almost always guanranteed to be the first request made by the
+// user, and since Render free tier goes cold after each 15 min, user might see nothing here, that is why useAsync feedback is needed
+
 export default function Taskform({ setTodos, setShowForm, token }) {
     const [task, setTask] = useState({
         oId: crypto.randomUUID(), // temporary id until we get the real id from the server; helps with optimistic UI update
@@ -21,12 +26,7 @@ export default function Taskform({ setTodos, setShowForm, token }) {
         setTodos((prev) => [optimisticTodo, ...prev]); // Optimistically update the UI
 
         try {
-            const data = await apiRequestHelper(`/api/todos`, {
-                method: "POST",
-                token,
-                body: task,
-            });
-
+            const data = await apiRequestHelper(`/api/todos`, {method: "POST", token, body: task });
             setTodos((prev) => prev.map(t => t.oId === task.oId ? data : t ));
             toast.success("Todo created successfully!");
             setTask({
@@ -37,7 +37,6 @@ export default function Taskform({ setTodos, setShowForm, token }) {
                 dueDate: "",
                 completed: false,
             });
-
             setShowForm(false);
             
         } catch (error) {
@@ -116,14 +115,14 @@ export default function Taskform({ setTodos, setShowForm, token }) {
             </button>
             <button
                 type="submit"
-                disabled={task.taskContent.trim().length === 0}
+                disabled={task.taskContent.trim().length === 0 }
                 className={`text-white text-md w-1/3 mt-4 text-center p-2 rounded-md flex-1 
                             transition-all duration-200 md:mt-8
                                  ${task.taskContent.trim().length === 0
                         ? 'bg-gray-500 cursor-not-allowed text-gray-700'
                         : 'bg-green-500 active:scale-105 active:bg-green-600 cursor-pointer'}`}
             >
-                Add Task
+               Add Task
             </button>
               </div>
         </form>

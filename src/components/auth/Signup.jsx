@@ -1,6 +1,7 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { apiRequestHelper } from "../../api";
+import useAsync from "../functions/useAsync";
 
 export default function Signup({ setAuth, setHaveAcc }) {
   const [formData, setFormData] = useState({
@@ -10,15 +11,14 @@ export default function Signup({ setAuth, setHaveAcc }) {
     rememberMe: false,
   });
 
-
+  const { isLoading, isSlow, run } = useAsync();
+  
   const handleSubmit = async () => {
-    if (!formData.email.trim() || !formData.password.trim() || !formData.name.trim()) return toast.error("Please enter the login details");
+    if (!formData.email.trim() || !formData.password.trim() || !formData.name.trim()) 
+      return toast.error("Please enter the login details");
 
     try {
-      const data = await apiRequestHelper(`/api/auth/signup`, {
-        method: "POST",
-        body: formData,
-      });
+      const data = await run(() => apiRequestHelper(`/api/auth/signup`, { method: "POST", body: formData }));
       setAuth({ token: data.token, user: data.user });
 
     } catch (err) {
@@ -29,16 +29,21 @@ export default function Signup({ setAuth, setHaveAcc }) {
 
   return (
     <>
-      <div className={`absolute min-h-dvh min-w-dvw inset-0 p-0 m-0 bg-[url(https://wallpapercave.com/wp/wp9024400.jpg)] bg-cover flex justify-center items-center `} >
+      <div className={`absolute min-h-dvh min-w-dvw inset-0 p-0 m-0 bg-[url(https://wallpapercave.com/wp/wp9024400.jpg)]
+         bg-cover flex justify-center items-center `} >
 
-        <div className='flex justify-center flex-col items-center gap-8 py-8 bg-white/20 backdrop-blur-xs border border-white/40 shadow-2xl rounded-2xl p-4 h-fit font-sans hover:backdrop-blur-md hover:scale-105 transition-all duration-1000'>
+        <div className='flex justify-center flex-col items-center gap-8 py-8
+         bg-white/20 backdrop-blur-xs border border-white/40 shadow-2xl rounded-2xl 
+         p-4 h-fit font-sans hover:backdrop-blur-md hover:scale-105 transition-all duration-1000'>
           <h1 className='font-semibold text-xl'>
             Register Now!
           </h1>
-          <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }} className='flex flex-col justify-center  gap-2 '>
+          <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }} className='flex flex-col justify-center  gap-2'>
 
             <label className='flex gap-2 justify-center items-center' htmlFor="name">Name:
-              <input className='flex-1 rounded-md outline-none border-none p-2  transition-all duration-700 focus:shadow-2xl shadow-black/40 '
+              <input 
+              className='flex-1 rounded-md outline-none border-none p-2 
+              transition-all duration-700 focus:shadow-2xl shadow-black/40 '
                 type="text"
                 name="name"
                 id="name"
@@ -48,7 +53,8 @@ export default function Signup({ setAuth, setHaveAcc }) {
 
             <label className='flex gap-2 justify-center items-center' htmlFor="email">Email:
               <input
-                className='flex-1 rounded-md outline-none border-none p-2 transition-all duration-700 focus:shadow-2xl shadow-black/40'
+                className='flex-1 rounded-md outline-none border-none p-2 
+                transition-all duration-700 focus:shadow-2xl shadow-black/40'
                 type="email"
                 name="email"
                 id="email"
@@ -58,7 +64,8 @@ export default function Signup({ setAuth, setHaveAcc }) {
 
             <label className='flex gap-2 justify-center items-center' htmlFor="password">Password:
               <input
-                className='flex-1 rounded-md outline-none border-none p-2 transition-all duration-700 focus:shadow-2xl shadow-black/40 '
+                className='flex-1 rounded-md outline-none border-none p-2 
+                transition-all duration-700 focus:shadow-2xl shadow-black/40 '
                 type="password"
                 name="password"
                 id="password"
@@ -76,8 +83,12 @@ export default function Signup({ setAuth, setHaveAcc }) {
               /> Remember me
             </label>
 
-            <button type="submit"
-              className="w-1/2 mx-auto mt-8 bg-white/10 border border-white/10 rounded-md p-2 hover:shadow-xl hover:scale-105 transition-all duration-700 focus:bg-transparent">Sign Up</button>
+            <button type="submit" disabled={isLoading}
+                className="w-1/2 mx-auto mt-8 bg-white/10 border
+                 border-white/10 rounded-md p-2 hover:shadow-xl hover:scale-105 
+                 transition-all duration-700 focus:bg-transparent">
+                { isLoading? ( isSlow ? "Waking up the Server..." : "Signing up..." ) : "Sign Up" }
+            </button>
           </form>
 
           <small>Already have an account? 

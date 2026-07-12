@@ -1,6 +1,7 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { apiRequestHelper } from "../../api";
+import useAsync from "../functions/useAsync";
 
 export default function Login({ setAuth, setHaveAcc }) {
   const [formData, setFormData] = useState({
@@ -9,22 +10,19 @@ export default function Login({ setAuth, setHaveAcc }) {
     rememberMe: ""
   });
 
+  const { isLoading, isSlow, run } = useAsync();
+
   const handleSubmit = async () => {
     if (!formData.email.trim() || !formData.password.trim()) return toast.error("Please enter the login details");
 
     try {
-      const data = await apiRequestHelper(`/api/auth/login`, {
-        method: "POST",
-        body: formData,
-      })
-      
+      const data = await run(() => apiRequestHelper(`/api/auth/login`, {method: "POST", body: formData }))
       setAuth({ token: data.token, user: data.user });
       toast.success("Logged in successfully!");
 
     } catch (err) {
       toast.error(`Failed to Login, ${err.message}`);
     }
-
   }
 
   return (
@@ -71,8 +69,10 @@ export default function Login({ setAuth, setHaveAcc }) {
               /> Remember me
             </label>
 
-            <button type="submit"
-              className="w-1/2 mx-auto mt-8 bg-white/10 border border-white/10 rounded-md p-2 hover:shadow-xl hover:scale-105 transition-all duration-700 focus:bg-transparent">Log In</button>
+            <button type="submit" disabled={isLoading}
+              className="w-1/2 mx-auto mt-8 bg-white/10 border border-white/10 rounded-md p-2 hover:shadow-xl hover:scale-105 transition-all duration-700 focus:bg-transparent">
+                { isLoading? ( isSlow ? "Waking up the Server..." : "Logging in..." ) : "Log In" }
+            </button>
           </form>
 
               <small>Doesn't have an account? 
