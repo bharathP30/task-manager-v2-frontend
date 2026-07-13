@@ -1,7 +1,8 @@
 import { Toaster } from 'react-hot-toast';
 import Auth from "./components/auth/AuthPage.jsx";
 import Home from "./components/pages/Home.jsx";
-import { AuthProvider, useAuthContext } from './context/AuthProvider.jsx';
+import { AuthProvider } from './context/AuthProvider.jsx';
+import { useAuthContext } from './context/useAuthContext.js';
 
 export default function App() {
   return (
