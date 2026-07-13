@@ -1,4 +1,3 @@
-
 export default function Filterbutton({ onClick, labelText }) {
     return (
         <button

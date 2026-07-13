@@ -1,5 +1,4 @@
-
-const Header = ({ setIsWantToLogout }) => {
+export default function Header ({ setIsWantToLogout }) {
   return (
     <>
       <div className='flex items-center justify-between w-full mx-auto my-4 md:max-w-3xl'>
@@ -8,6 +7,4 @@ const Header = ({ setIsWantToLogout }) => {
     </div>
     </>
   )
-}
-
-export default Header
+} 

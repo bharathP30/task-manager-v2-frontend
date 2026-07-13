@@ -1,4 +1,3 @@
-
 export class ApiError extends Error {
   constructor(message, status) {
     super(message);       // sets this.message, same as a normal Error

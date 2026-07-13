@@ -1,13 +1,15 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { apiRequestHelper } from "../../api";
+import { useAuthContext } from "../../context/useAuthContext";
 
 // there probably is no need to use the useAsync function here for the CRUD features, since by the time that the user
 // makes these requests, the server probably is already guanranteed to be be warm and running
 // login, signup and initial fetchtodos() is not, there are almost always guanranteed to be the first request made by the
 // user, and since Render free tier goes cold after each 15 min, user might see nothing here, that is why useAsync feedback is needed
 
-export default function Taskform({ setTodos, setShowForm, token }) {
+export default function Taskform({ setTodos, setShowForm }) {
+    const { auth : { token }} = useAuthContext();
     const [task, setTask] = useState({
         oId: crypto.randomUUID(), // temporary id until we get the real id from the server; helps with optimistic UI update
         taskContent: "",

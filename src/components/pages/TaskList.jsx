@@ -4,11 +4,13 @@ import UpdateForm from "./UpdateForm";
 import DeleteModal from "./DeleteTodoModal";
 import toast from 'react-hot-toast';
 import { apiRequestHelper } from "../../api";
+import { useAuthContext } from "../../context/useAuthContext";
 
-const TaskList = ({ flags = {}, todos, setTodos, token }) => {
+const TaskList = ({ flags = {}, todos, setTodos }) => {
     const { isLoading, isSlow } = flags;
     const [showUpdateForm, setShowUpdateForm] = useState(false);
     const [deleteTargetId, setDeleteTargetId] = useState(null);
+    const { auth : { token } } = useAuthContext();
 
     const [updateData, setUpdateData] = useState({
         taskContent: "",
@@ -129,21 +131,21 @@ const TaskList = ({ flags = {}, todos, setTodos, token }) => {
                      setUpdateData={handleUpdateForm}
                     />
                 ))
-            )}
-        </div>
+                )}
+            </div>
 
+                {showUpdateForm && (
+                    <UpdateForm 
+                        handleUpdate={handleUpdate} 
+                        setShowUpdateForm={setShowUpdateForm} 
+                        task={updateData} setTask={setUpdateData} />
+                )}
 
-        {showUpdateForm && (
-
-            <UpdateForm handleUpdate={handleUpdate} setShowUpdateForm={setShowUpdateForm} task={updateData} setTask={setUpdateData} />
-        )}
-
-        {deleteTargetId && (
-                <DeleteModal
-                    onConfirm={handleDelete}
-                    onCancel={() => setDeleteTargetId(null)}
-                />
-            )}
+                {deleteTargetId && (
+                        <DeleteModal
+                            onConfirm={handleDelete}
+                            onCancel={() => setDeleteTargetId(null)} />
+                    )}
         </>
     )
 }

@@ -1,4 +1,3 @@
-
 export default function TaskItem({ todo, onToggle, onDelete, setUpdateData }) {
   const isDone = "text-sm text-gray-200 md:text-xl line-through opacity-50 transition duration-300 cursor-pointer";
   const notDone = "text-sm text-gray-100 md:text-xl transition duration-300 cursor-pointer";

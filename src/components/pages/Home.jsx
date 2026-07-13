@@ -9,8 +9,12 @@ import LogoutModal from "./LogoutModal";
 import toast from 'react-hot-toast';
 import { apiRequestHelper, ApiError } from "../../api";
 import useAsync from "../functions/useAsync";
+import { useAuthContext } from "../../context/useAuthContext";
 
-const Home = ({ token, setAuth }) => {
+const Home = () => {
+  const { auth, setAuth } = useAuthContext();
+  const token = auth.token;
+
   const [isAuthExpired, setIsAuthExpired] = useState(false);
   const [isWantToLogout, setIsWantToLogout] = useState(false);
 
@@ -73,33 +77,29 @@ const Home = ({ token, setAuth }) => {
     <>
       <div className="flex flex-col justify-start px-4 pb-4 m-0 overflow-hidden h-dvh min-w-dvw 
         bg-linear-to-br from-black via-purple-950 to-black">
-        <Header setIsWantToLogout={setIsWantToLogout} />
-        <SearchBar 
-          searchterm={searchTerm} onSearchChange={setSearchTerm} 
-          statusFilter={filterStatus} onStatusChange={setFilterStatus}/>
+
+          <Header setIsWantToLogout={setIsWantToLogout} />
+            <SearchBar 
+              searchterm={searchTerm} onSearchChange={setSearchTerm} 
+              statusFilter={filterStatus} onStatusChange={setFilterStatus}/>
       
         <div className="flex items-center justify-center max-w-3xl gap-4 p-2 mx-auto">
-          <FilterBar 
-            filterPrio={filterPrio} setFilterPrio={setFilterPrio}
-            filterCat={filterCat} setFilterCat={setFilterCat}/>
+          <FilterBar  filterPrio={filterPrio} setFilterPrio={setFilterPrio}
+                      filterCat={filterCat} setFilterCat={setFilterCat}/>
+
           <button onClick={() => setShowForm(true)} 
-          className='px-4 py-2 text-lg transition-all duration-700 bg-green-400 
-          rounded-md cursor-pointer flex-2 w-fit text-white/80 backdrop-blur-2xl border-white/20 
-          hover:scale-105 active:bg-gray-700'>
-            Add Task</button>
+                className='px-4 py-2 text-lg transition-all duration-700 bg-green-400 
+                rounded-md cursor-pointer flex-2 w-fit text-white/80 backdrop-blur-2xl border-white/20 
+                hover:scale-105 active:bg-gray-700'>
+                  Add Task
+          </button>
+
         </div>
         
-        <TaskList flags={{ isLoading, isSlow }} todos={todos} setTodos={setTodos} token={token}  />
-        
-        { showForm && (<Taskform setTodos={setTodos} setShowForm={setShowForm} token={token} />)
-        }
-
-        {
-          isAuthExpired && (<ExpiryModal onclick={handleLogOut} />)
-        }
-        {
-          isWantToLogout && (<LogoutModal isWantToLogout={setIsWantToLogout} onLogout={onLogout}/>)
-        }
+          <TaskList flags={{ isLoading, isSlow }} todos={todos} setTodos={setTodos} />
+            { showForm && (<Taskform setTodos={setTodos} setShowForm={setShowForm} />) }
+              { isAuthExpired && (<ExpiryModal onclick={handleLogOut} />) }
+                { isWantToLogout && (<LogoutModal isWantToLogout={setIsWantToLogout} onLogout={onLogout}/>) }
       </div>
     </>
   )

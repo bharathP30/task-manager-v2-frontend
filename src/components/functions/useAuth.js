@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 
 export default function useAuth() {
@@ -11,7 +10,8 @@ export default function useAuth() {
                 return { token, user: JSON.parse(user) };
             }
             return null;
-        } catch (error) {
+        } catch (err) {
+            console.error(err);
             return null;
         }
     });

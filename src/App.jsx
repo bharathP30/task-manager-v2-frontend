@@ -1,24 +1,22 @@
 import { Toaster } from 'react-hot-toast';
 import Auth from "./components/auth/AuthPage.jsx";
 import Home from "./components/pages/Home.jsx";
-import useAuth from "./components/functions/useAuth.js";
+import { AuthProvider, useAuthContext } from './context/AuthProvider.jsx';
 
 export default function App() {
-  const [auth, setAuth] = useAuth();
+  return (
+      <AuthProvider>
+          <AppContent/>
+      </AuthProvider>
+  )
+}
 
-  if (!auth) {
+function AppContent() {
+  const { auth } = useAuthContext();
    return ( 
     <>
-      <Toaster position="top-right" />
-      <Auth setAuth={setAuth} /> 
+          <Toaster position="top-right" />
+          { auth ? <Home/> : <Auth/> }
     </>
     )
-  }
-  
-  return (
-    <>
-      <Toaster position="top-right" />
-      <Home token={auth.token} setAuth={setAuth} />
-    </>
-  )
 }

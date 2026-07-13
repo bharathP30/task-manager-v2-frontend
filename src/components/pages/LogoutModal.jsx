@@ -2,7 +2,7 @@ export default function LogoutModal({ isWantToLogout, onLogout }) {
     return (
         <div className="fixed inset-0 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
             <div className="flex flex-col items-center gap-6 p-8 text-white border rounded-xl bg-black/80 border-white/10 shadow-lg w-full max-w-sm">
-                
+            
                 <span className="text-4xl">👋</span>
                 <h2 className="text-2xl font-semibold">Log Out?</h2>
                 <p className="text-sm text-white/50">You'll need to sign in again to access your tasks.</p>

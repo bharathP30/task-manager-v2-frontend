@@ -2,7 +2,7 @@ import Signup from "./Signup.jsx";
 import Login from "./Login.jsx";
 import { useEffect, useState } from "react";
 
-const AuthPage = ({ setAuth }) => {
+const AuthPage = () => {
   const [haveAcc, setHaveAcc] = useState(() => {
     const saved = localStorage.getItem('saved');
     return saved ? JSON.parse(saved): false
@@ -14,8 +14,8 @@ const AuthPage = ({ setAuth }) => {
 
   return (
     <>
-      {haveAcc ? (<Login setAuth={setAuth} setHaveAcc={setHaveAcc} />) 
-              : (<Signup setAuth={setAuth} setHaveAcc={setHaveAcc} />)}
+      {haveAcc ? (<Login setHaveAcc={setHaveAcc} />) 
+              : (<Signup setHaveAcc={setHaveAcc} />)}
     </>
   )
 }

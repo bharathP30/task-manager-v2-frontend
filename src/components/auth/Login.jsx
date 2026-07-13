@@ -2,14 +2,15 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { apiRequestHelper } from "../../api";
 import useAsync from "../functions/useAsync";
+import { useAuthContext } from "../../context/useAuthContext";
 
-export default function Login({ setAuth, setHaveAcc }) {
+export default function Login({ setHaveAcc }) {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
     rememberMe: ""
   });
-
+  const { setAuth } = useAuthContext();
   const { isLoading, isSlow, run } = useAsync();
 
   const handleSubmit = async () => {
