@@ -53,9 +53,7 @@ const TaskList = ({ flags = {}, todos, setTodos }) => {
 
     const handleDelete = async () => {
         const todoId = deleteTargetId;
-        setDeleteTargetId(null); // close modal immediately
         const deletedTodo = todos.find(t => t._id === todoId);
-
         setTodos((prev) => prev.filter(t => t._id !== todoId));
 
         try {
@@ -63,11 +61,12 @@ const TaskList = ({ flags = {}, todos, setTodos }) => {
                 method: "DELETE",
                 token,
             });
+            setDeleteTargetId(null);
             toast.success("Task deleted!");
              
         } catch (err) {
             console.error(err.message || err);
-            toast.error(`Failed to delete task, ${err.error}`);
+            toast.error(`Failed to delete task, ${err.message}`);
             setTodos((prev) => [deletedTodo, ...prev]);
         }
     }

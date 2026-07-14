@@ -85,10 +85,6 @@ const Home = () => {
       setAuth(null);
     }
 
-    useEffect(() => {
-      console.log("fetchTodos identity changed");
-    }, [fetchTodos]);
-
   return (
     <>
       <div className="flex flex-col justify-start px-4 pb-4 m-0 overflow-hidden h-dvh min-w-dvw 
