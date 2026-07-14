@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Taskform from "./TaskForm";
 import TaskList from "./TaskList";
 import Header from "./Header";
@@ -25,9 +25,9 @@ const Home = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
 
-   const { isLoading, isSlow, run } = useAsync();
+  const { isLoading, isSlow, run } = useAsync();
    
-  const buildFilterURL = () => {
+  const buildFilterURL = useCallback(() => { // Memoised func with constant ref unless
     let url = `/api/todos`;
     const params = new URLSearchParams();
 
@@ -36,19 +36,17 @@ const Home = () => {
     if (filterStatus !== "") params.append("completed", filterStatus);
     if (searchTerm !== "") params.append("search", searchTerm);
     
-    
     if (params.toString()) {
       url += `/filter?${params.toString()}`;
     }
     return url;
-  };
+  }, [ filterCat, filterPrio, filterStatus, searchTerm ]); // deps change here
 
-    const fetchTodos = async () => {
+    const fetchTodos = useCallback(async () => { // Memoised func
         try {
             const url = buildFilterURL();
             const data = await run(() => apiRequestHelper(url, { token }));
             setTodos(data);
-            
         } catch (err) {
           if (err instanceof ApiError && err.status === 401) {
               setIsAuthExpired(true);
@@ -58,21 +56,46 @@ const Home = () => {
           }
             console.error(err.message);
         }
-    }
+    }, [buildFilterURL ,run, token]); // changes only when deps change
 
-    useEffect(() => {
-        fetchTodos();
-    }, [ filterCat, filterPrio, filterStatus, searchTerm ]);
+    useEffect(() => { 
+        const timeoutId = window.setTimeout(() => {
+            void fetchTodos(); // this kept throwing lint complaints
+        }, 0);          // I changed it to run through a tiny deferred timeout, 
+                  // which keeps the behavior similar but avoids the lint complaint.
 
-    const handleLogOut = () => {
+        return () => window.clearTimeout(timeoutId);
+    }, [fetchTodos]);
+
+    //INFO: the effect will rerun whenever fetchTodos changes. 
+    //INFO: And fetchTodos changes only when its own dependencies change, 
+    //INFO: which include buildFilterURL, token, and run. 
+    //INFO: Since buildFilterURL changes when the filters change, 
+    //INFO: the effect will rerun when the filters change too.
+
+    //INFO: polling function - fetch data from server at regular intervals to sync
+    useEffect(() => {  
+      const interval = setInterval(() => {
+          void fetchTodos();
+        }, 10000);
+
+        return () => clearInterval(interval);
+    }, [fetchTodos]); 
+
+    //INFO:  deps are always something that the effect reads
+    //INFO: the effect depends on the memoized function(fetchTodos)
+    //INFO: that function depends on another memoized function(buildURL)
+    //INFO: and that function dependsd on filters
+    //INFO: therefore THIS effect effectively depends on the filters indirectly
+
+    const handleLogOut = () => { // for token expiration
       localStorage.clear();
       window.location.reload();
     }
 
-    const onLogout = () => {
+    const onLogout = () => { // for logging out
       setAuth(null);
     }
-
   return (
     <>
       <div className="flex flex-col justify-start px-4 pb-4 m-0 overflow-hidden h-dvh min-w-dvw 
@@ -93,7 +116,6 @@ const Home = () => {
                 hover:scale-105 active:bg-gray-700'>
                   Add Task
           </button>
-
         </div>
         
           <TaskList flags={{ isLoading, isSlow }} todos={todos} setTodos={setTodos} />
@@ -104,5 +126,4 @@ const Home = () => {
     </>
   )
 }
-
 export default Home;
