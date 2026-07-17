@@ -71,7 +71,7 @@ const Home = () => {
     useEffect(() => {
         const interval = window.setInterval(() => {
             void fetchTodos();
-        }, 10000);
+        }, 20000);
 
         return () => window.clearInterval(interval);
     }, [fetchTodos]);
