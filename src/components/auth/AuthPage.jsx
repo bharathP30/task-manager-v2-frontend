@@ -8,14 +8,21 @@ const AuthPage = () => {
     return saved ? JSON.parse(saved): false
   });
 
+  //NOTE: there is no real user need for this but i wanted the state to remember it across visits
   useEffect(() => {
     localStorage.setItem("saved", JSON.stringify(haveAcc));
   }, [haveAcc]);
 
   return (
     <>
-      {haveAcc ? (<Login setHaveAcc={setHaveAcc} />) 
-              : (<Signup setHaveAcc={setHaveAcc} />)}
+      <div className={
+        `absolute min-h-dvh min-w-dvw inset-0 p-0 m-0 
+        bg-[url(https://wallpapercave.com/wp/wp9024400.jpg)]
+         bg-cover flex justify-center items-center `} >
+
+            {haveAcc ? (<Login setHaveAcc={setHaveAcc} />) : (<Signup setHaveAcc={setHaveAcc} />)}
+            
+        </div>
     </>
   )
 }

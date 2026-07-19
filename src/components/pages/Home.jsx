@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import Taskform from "./TaskForm";
+import TaskForm from "./TaskForm";
 import TaskList from "./TaskList";
 import Header from "./Header";
 import FilterBar from "./FilterBar";
@@ -100,15 +100,15 @@ const Home = () => {
                       filterCat={filterCat} setFilterCat={setFilterCat}/>
 
           <button onClick={() => setShowForm(true)} 
-                className='px-4 py-2 text-lg transition-all duration-700 bg-green-400 
-                rounded-md cursor-pointer flex-2 w-fit text-white/80 backdrop-blur-2xl border-white/20 
+                className='px-4 py-2 text-md transition-all duration-700 bg-green-400 
+                rounded-md cursor-pointer flex-2 w-fit text-white/80
                 hover:scale-105 active:bg-gray-700'>
                   Add Task
           </button>
         </div>
         
           <TaskList flags={{ isLoading, isSlow }} todos={todos} setTodos={setTodos} />
-            { showForm && (<Taskform setTodos={setTodos} setShowForm={setShowForm} />) }
+            { showForm && (<TaskForm setTodos={setTodos} setShowForm={setShowForm} />) }
               { isAuthExpired && (<ExpiryModal onclick={handleLogOut} />) }
                 { isWantToLogout && (<LogoutModal isWantToLogout={setIsWantToLogout} onLogout={onLogout}/>) }
       </div>

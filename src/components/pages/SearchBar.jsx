@@ -1,12 +1,13 @@
-export default function Searchbar ({searchterm, onSearchChange, statusFilter, onStatusChange}) {
+export default function SearchBar ({searchterm, onSearchChange, statusFilter, onStatusChange}) {
     return (
-        <div className="flex w-full p-2 border rounded-md bg-gray-400/20 border-white/10 backdrop-blur-lg md:max-w-xl md:mx-auto md:space-x-2 ">           
-            <select className="p-2 text-center text-black border rounded-md outline-none appearance-none border-white/10 bg-gray-300/10 w-fit"
+        <div className="flex justify-center gap-2 w-full p-2 border rounded-md bg-gray-400/20 border-white/10 backdrop-blur-lg md:max-w-xl md:mx-auto md:space-x-2 ">           
+            
+            <select className="w-fit text-center text-black border rounded-md outline-none appearance-none border-white/10 bg-gray-300/10"
                     name="statusFilter" id="statusFilter"
                     value={statusFilter}
                     onChange={(e)=>onStatusChange(e.target.value)}
                     >
-                    <option value="">All</option>
+                    <option value="">Status</option>
                     <option value="true">Done</option>
                     <option value="false">Pending</option>
             </select>
