@@ -1,10 +1,12 @@
 export default function FilterBar ({filterPrio, setFilterPrio, filterCat, setFilterCat }) {
        return (
-              <div className="flex flex-1 gap-2 p-2 my-4 border rounded-md bg-gray-400/20
+              <div className="flex gap-2 p-2 my-4 border rounded-md bg-gray-400/20
                border-white/10 backdrop-blur-lg md:mx-auto">
                      
-                     <select className="flex-1 px-2 text-center text-black border rounded-md outline-none
+                     <select className="flex-1 px-2 text-center text-black border 
+                            min-w-0 rounded-md outline-none
                             appearance-none border-white/10 bg-gray-300/10"
+
                             name="filterCategory" id="filterCategory"
                             value={filterCat}
                             onChange={(e)=>setFilterCat(e.target.value)} >
@@ -16,7 +18,10 @@ export default function FilterBar ({filterPrio, setFilterPrio, filterCat, setFil
                                    <option value="others">Others</option>
                      </select>
                      
-                     <select className="flex-1 px-2 text-center text-black border rounded-md outline-none appearance-none  w-fit border-white/10 bg-gray-300/10"
+                     <select className="flex-1 px-2 text-center text-black border 
+                     min-w-0 rounded-md outline-none 
+                     appearance-none border-white/10 bg-gray-300/10"
+
                             name="filterPriority" id="filterPriority"
                             value={filterPrio}
                             onChange={(e)=>setFilterPrio(e.target.value)} >

@@ -87,31 +87,32 @@ const Home = () => {
 
   return (
     <>
-      <div className="flex flex-col justify-start px-4 pb-4 m-0 overflow-hidden h-dvh min-w-dvw 
+    <div className="flex flex-col justify-start p-4 m-0 h-dvh min-w-dvw overflow-auto
         bg-linear-to-br from-black via-purple-950 to-black">
-
+      <div>
           <Header setIsWantToLogout={setIsWantToLogout} />
             <SearchBar 
               searchterm={searchTerm} onSearchChange={setSearchTerm} 
               statusFilter={filterStatus} onStatusChange={setFilterStatus}/>
       
-        <div className="flex items-center justify-center max-w-3xl gap-4 p-2 mx-auto">
+        <div className="flex items-center justify-center w-fit md:max-w-2xl gap-4 p-2 mx-auto">
           <FilterBar  filterPrio={filterPrio} setFilterPrio={setFilterPrio}
                       filterCat={filterCat} setFilterCat={setFilterCat}/>
 
           <button onClick={() => setShowForm(true)} 
                 className='px-4 py-2 text-md transition-all duration-700 bg-green-400 
-                rounded-md cursor-pointer flex-2 w-fit text-white/80
+                rounded-md cursor-pointer w-fit text-white/80
                 hover:scale-105 active:bg-gray-700'>
                   Add Task
           </button>
         </div>
+      </div>
         
           <TaskList flags={{ isLoading, isSlow }} todos={todos} setTodos={setTodos} />
             { showForm && (<TaskForm setTodos={setTodos} setShowForm={setShowForm} />) }
               { isAuthExpired && (<ExpiryModal onclick={handleLogOut} />) }
                 { isWantToLogout && (<LogoutModal isWantToLogout={setIsWantToLogout} onLogout={onLogout}/>) }
-      </div>
+    </div>
     </>
   )
 }

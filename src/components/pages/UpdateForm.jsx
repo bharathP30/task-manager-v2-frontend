@@ -12,13 +12,13 @@ export default function UpdateForm({ handleUpdate, setShowUpdateForm, task, setT
     }
 
     return (
-        <div className={`fixed inset-0 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm transition-opacity duration-300 ease-out 
-                    ${isTextareaFocused ? 'items-start pt-8 md:items-center md:pt-0' : 'items-center'}`
+        <div className={`fixed inset-0 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm transition-opacity duration-300 ease-in-out
+                    ${isTextareaFocused ? 'items-start pt-12 lg:items-center lg:pt-0' : 'items-center'}`
                 }>
 
             <form onSubmit={handleSubmit}
                     className={`w-full p-4 font-sans text-center text-white border rounded-lg bg-black/70
-                        border-white/20 backdrop-blur-lg md:max-w-3xl md:p-8 md:text-lg transition-transform duration-800 ease-out
+                        border-white/20 backdrop-blur-lg md:max-w-3xl md:p-8 md:text-lg transition-transform duration-800 ease-in-out
                         ${isTextareaFocused ? '-translate-y-6 md:translate-y-0' : ''}`
                     }>
 

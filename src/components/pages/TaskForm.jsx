@@ -51,18 +51,18 @@ export default function TaskForm({ setTodos, setShowForm }) {
     const optionStyles = "font-mono bg-black/90 text-white/80" ;
 
     return (
-        <div className={`fixed inset-0 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm transition-opacity duration-200 ease-out
-                ${isTextareaFocused ? 'items-start pt-8 md:items-center md:pt-0' : 'items-center'}`
+        <div className={`fixed inset-0 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm transition-opacity duration-300 ease-in-out
+                ${isTextareaFocused ? 'items-start pt-12 lg:items-center lg:pt-0' : 'items-center'}`
                 }>
 
         <form   onSubmit={handleSubmit} 
                 className={`w-full p-4 font-sans text-center text-white border rounded-lg bg-linear-to-b from-black/50 to-black/40
-                    border-white/20 backdrop-blur-lg md:max-w-3xl md:p-8 md:text-lg transition-transform duration-800 ease-out 
+                    border-white/20 backdrop-blur-lg md:max-w-3xl md:p-8 md:text-lg transition-transform duration-300 ease-in-out 
                     ${isTextareaFocused ? '-translate-y-6 md:translate-y-0' : ''}`
                 }>
 
             <textarea required
-                className='w-full p-4 m-2 mx-auto font-sans text-gray-100 bg-transparent border rounded-md outline-none border-white/10 backdrop-blur-md focus:ring-1 ring-white/10 placeholder-white/40'
+                className='w-full p-4 mb-2 font-sans text-gray-100 bg-transparent border rounded-md outline-none border-white/10 backdrop-blur-md focus:ring-1 ring-white/10 placeholder-white/40'
                 onChange={(e) => setTask({ ...task, taskContent: e.target.value })}
                 onFocus={() => setIsTextareaFocused(true)}
                 onBlur={() => setIsTextareaFocused(false)}
@@ -100,7 +100,6 @@ export default function TaskForm({ setTodos, setShowForm }) {
                     <option className={optionStyles} value="high">High</option>
                     <option className={optionStyles} value="medium">Medium</option>
                     <option className={optionStyles} value="low">Low</option>
-
                 </select>
                 
                     <input required
@@ -120,8 +119,7 @@ export default function TaskForm({ setTodos, setShowForm }) {
                 className={`text-md w-1/3 mt-4 text-center p-2 rounded-md  flex-1 
                             transition-all duration-200 md:mt-8
                         bg-gray-500 text-gray-700`
-                        }
-            >
+                        }  >
                 Cancel
             </button>
             <button

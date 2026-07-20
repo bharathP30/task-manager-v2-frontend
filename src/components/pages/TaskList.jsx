@@ -113,7 +113,15 @@ const TaskList = ({ flags = {}, todos, setTodos }) => {
 
     return (
         <>
-            <div className="flex-1 w-full h-full max-h-screen p-4 mb-4 space-y-2 overflow-y-auto font-sans text-center text-white border rounded-lg bg-linear-to-b from-black/30 to-black/40 bg-black/40 border-white/20 backdrop-blur-lg md:mx-auto md:max-w-3xl md:p-8 md:text-lg">
+            {/* className="w-full h-full max-h-screen p-4 mb-4 space-y-2 
+               font-sans text-center text-white border rounded-sm 
+               bg-linear-to-b from-black/30 to-black/40 bg-black/40 border-white/20 
+               backdrop-blur-lg md:mx-auto md:max-w-3xl md:p-8 md:text-lg" v */
+               }
+
+            <div className="grid gap-2 grid-cols-1 max-w-xl mx-auto sm:grid-cols-2 sm:max-w-4xl lg:grid-cols-3 lg:max-w-6xl"
+            >
+
                 {isLoading && todos.length === 0 ? (
                     <p className="text-xs text-gray-500 font-mono">
                     {isSlow ? "this can take up to a minute…" : "Loading your tasks…"}
