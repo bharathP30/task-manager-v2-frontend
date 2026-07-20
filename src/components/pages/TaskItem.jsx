@@ -8,7 +8,7 @@ export default function TaskItem({ todo, onToggle, onDelete, setUpdateData }) {
     <div className="flex flex-col gap-1 p-2 rounded-md md:p-4 bg-transparent border border-white/10 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all duration-300">
       
       <div className="flex items-center justify-start gap-2 px-2">
-        < input type="checkbox" name="toggleBtn" id="toggleTodo" 
+        < input type="checkbox" name="toggleBtn" id="toggleTodo" value={todo.completed}
           onClick={() => onToggle({ todoId: todo._id })} />
           
         <p className={todo.completed ? isDone : notDone} >

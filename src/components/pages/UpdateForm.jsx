@@ -12,10 +12,15 @@ export default function UpdateForm({ handleUpdate, setShowUpdateForm, task, setT
     }
 
     return (
-        <div className={`fixed inset-0 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm transition-all duration-200 ${isTextareaFocused ? 'md:items-start md:pt-8' : 'items-center'}`}>
+        <div className={`fixed inset-0 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm transition-opacity duration-300 ease-out 
+                    ${isTextareaFocused ? 'items-start pt-8 md:items-center md:pt-0' : 'items-center'}`
+                }>
+
             <form onSubmit={handleSubmit}
                     className={`w-full p-4 font-sans text-center text-white border rounded-lg bg-black/70
-                         border-white/20 backdrop-blur-lg md:max-w-3xl md:p-8 md:text-lg transition-all duration-200 ${isTextareaFocused ? 'md:-translate-y-6' : ''}`}>
+                        border-white/20 backdrop-blur-lg md:max-w-3xl md:p-8 md:text-lg transition-transform duration-800 ease-out
+                        ${isTextareaFocused ? '-translate-y-6 md:translate-y-0' : ''}`
+                    }>
 
                     <textarea required
                        className='w-full p-2 mx-auto my-4 font-sans text-gray-100 bg-transparent border rounded-sm outline-none border-white/10 backdrop-blur-md focus:ring-1 ring-white/10 placeholder-white/40'
@@ -25,7 +30,6 @@ export default function UpdateForm({ handleUpdate, setShowUpdateForm, task, setT
                        id="taskInput"
                        value={task.taskContent}
                        placeholder='Enter Task...' />
-
 
                     <div className='grid grid-cols-1 gap-2 px-2 sm:grid-cols-2 sm:gap-4 md:grid-cols-3'>
 
