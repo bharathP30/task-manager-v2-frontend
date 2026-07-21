@@ -31,7 +31,7 @@ export default function TaskItem({ todo, onToggle, onDelete, setUpdateData }) {
 
       </div>
 
-      <div className="flex px-2 items-baseline justify-between gap-4 ">
+      <div className="flex px-2 items-baseline justify-between gap-4 font-mono">
           <div className="flex flex-wrap items-center gap-2">
               {priorityLabel && (
                 <small className={`text-xs opacity-80 ${priorityClass}`}>
