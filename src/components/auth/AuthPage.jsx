@@ -16,9 +16,9 @@ const AuthPage = () => {
   return (
     <>
       <div className={
-        `absolute min-h-dvh min-w-dvw inset-0 p-0 m-0 
+        `absolute min-h-dvh min-w-dvw inset-0 box-border
         bg-[url(https://wallpapercave.com/wp/wp9024400.jpg)]
-         bg-cover flex justify-center items-center `} >
+         bg-cover flex justify-center items-center`} >
 
             {haveAcc ? (<Login setHaveAcc={setHaveAcc} />) : (<Signup setHaveAcc={setHaveAcc} />)}
             

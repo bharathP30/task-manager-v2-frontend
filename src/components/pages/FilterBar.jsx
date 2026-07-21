@@ -1,11 +1,12 @@
 export default function FilterBar ({filterPrio, setFilterPrio, filterCat, setFilterCat }) {
        return (
-              <div className="flex gap-2 p-2 my-4 border rounded-md bg-gray-400/20
-               border-white/10 backdrop-blur-lg md:mx-auto">
+              <div className="flex flex-1 gap-1 p-1 rounded-md
+                     bg-glass backdrop-blur-glass border border-glass-border">
                      
-                     <select className="flex-1 px-2 text-center text-black border 
-                            min-w-0 rounded-md outline-none
-                            appearance-none border-white/10 bg-gray-300/10"
+                     <select 
+                     className="flex-1 min-w-0 md:p-1
+                     bg-surface-elevated text-center text-text-muted  
+                             border border-glass-border rounded-md outline-none appearance-none"
 
                             name="filterCategory" id="filterCategory"
                             value={filterCat}
@@ -18,9 +19,9 @@ export default function FilterBar ({filterPrio, setFilterPrio, filterCat, setFil
                                    <option value="others">Others</option>
                      </select>
                      
-                     <select className="flex-1 px-2 text-center text-black border 
-                     min-w-0 rounded-md outline-none 
-                     appearance-none border-white/10 bg-gray-300/10"
+                     <select className="flex-1 min-w-0 md:p-1
+                     bg-surface-elevated text-center text-text-muted  
+                             border border-glass-border rounded-md outline-none appearance-none"
 
                             name="filterPriority" id="filterPriority"
                             value={filterPrio}

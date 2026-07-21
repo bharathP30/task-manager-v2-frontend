@@ -48,21 +48,21 @@ export default function TaskForm({ setTodos, setShowForm }) {
         }
     };
 
-    const optionStyles = "font-mono bg-black/90 text-white/80" ;
+    const optionStyles = "font-mono bg-surface-elevated text-text";
 
     return (
-        <div className={`fixed inset-0 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm transition-opacity duration-300 ease-in-out
+        <div className={`fixed inset-0 flex items-center justify-center p-4 bg-background/80 backdrop-blur-blurry transition-opacity duration-normal ease-default
                 ${isTextareaFocused ? 'items-start pt-12 lg:items-center lg:pt-0' : 'items-center'}`
                 }>
 
         <form   onSubmit={handleSubmit} 
-                className={`w-full p-4 font-sans text-center text-white border rounded-lg bg-linear-to-b from-black/50 to-black/40
-                    border-white/20 backdrop-blur-lg md:max-w-3xl md:p-8 md:text-lg transition-transform duration-300 ease-in-out 
+                className={`w-full p-4 font-sans text-center text-text border rounded-lg bg-surface/80
+                 border-glass-border backdrop-blur-glass md:max-w-3xl md:p-8 md:text-lg transition-transform duration-300 ease-in-out 
                     ${isTextareaFocused ? '-translate-y-6 md:translate-y-0' : ''}`
                 }>
 
             <textarea required
-                className='w-full p-4 mb-2 font-sans text-gray-100 bg-transparent border rounded-md outline-none border-white/10 backdrop-blur-md focus:ring-1 ring-white/10 placeholder-white/40'
+                className='w-full p-4 mb-2 font-sans text-text bg-transparent border rounded-md outline-none border-border/70 backdrop-blur-md focus:border-border-focus placeholder:text-text-muted'
                 onChange={(e) => setTask({ ...task, taskContent: e.target.value })}
                 onFocus={() => setIsTextareaFocused(true)}
                 onBlur={() => setIsTextareaFocused(false)}
@@ -74,7 +74,7 @@ export default function TaskForm({ setTodos, setShowForm }) {
             <div className='grid gap-2 grid-cols-1 px-2 sm:grid-cols-2 md:grid-cols-3 md:gap-4'>
 
                 <select
-                    className='h-10 font-sans text-center text-white rounded-md outline-none cursor-pointer bg-white/10 border border-white/10'
+                    className='h-10 font-sans text-center text-text rounded-md outline-none cursor-pointer bg-surface-elevated border border-border'
                     onChange={(e) => setTask({ ...task, category: e.target.value })}
                     name="categoryType"
                     id="categoryType"
@@ -90,7 +90,7 @@ export default function TaskForm({ setTodos, setShowForm }) {
                 </select>
 
                 <select
-                    className='h-10 font-sans text-center text-white rounded-md outline-none cursor-pointer bg-white/10 border border-white/10'
+                    className='h-10 font-sans text-center text-text rounded-md outline-none cursor-pointer bg-surface-elevated border border-border'
                     onChange={(e) => setTask({ ...task, priority: e.target.value })}
                     name="priorityType"
                     id="priorityType"
@@ -103,7 +103,7 @@ export default function TaskForm({ setTodos, setShowForm }) {
                 </select>
                 
                     <input required
-                        className='h-10 w-full flex justify-center font-sans text-center text-white rounded-md outline-none cursor-text bg-white/10 border border-white/10'
+                        className='h-10 w-full flex justify-center font-sans text-center text-text rounded-md outline-none cursor-text bg-surface-elevated border border-border'
                         style={{ colorScheme: 'dark' }}
                         onChange={(e) => setTask({ ...task, dueDate: e.target.value })}
                         type="date"
@@ -116,20 +116,18 @@ export default function TaskForm({ setTodos, setShowForm }) {
                 <button
                 type="reset"
                 onClick={() => setShowForm(false)}
-                className={`text-md w-1/3 mt-4 text-center p-2 rounded-md  flex-1 
-                            transition-all duration-200 md:mt-8
-                        bg-gray-500 text-gray-700`
+                className={`text-md w-1/3 mt-4 text-center p-2 rounded-md flex-1 transition-all duration-normal md:mt-8
+                        bg-surface-elevated text-text-muted hover:bg-surface-hover`
                         }  >
                 Cancel
             </button>
             <button
                 type="submit"
                 disabled={task.taskContent.trim().length === 0 }
-                className={`text-white text-md w-1/3 mt-4 text-center p-2 rounded-md flex-1 
-                            transition-all duration-200 md:mt-8
+                className={`text-text text-md w-1/3 mt-4 text-center p-2 rounded-md flex-1 transition-all duration-normal md:mt-8
                                  ${task.taskContent.trim().length === 0
-                        ? 'bg-gray-500 cursor-not-allowed text-gray-700'
-                        : 'bg-green-500 active:scale-105 active:bg-green-600 cursor-pointer'}`}>
+                        ? 'bg-surface-elevated cursor-not-allowed text-text-disabled'
+                        : 'bg-success hover:bg-success/90 active:scale-105 active:bg-success/80 cursor-pointer'}`}>
                Add Task
             </button>
               </div>

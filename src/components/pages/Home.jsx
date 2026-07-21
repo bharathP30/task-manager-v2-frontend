@@ -88,21 +88,22 @@ const Home = () => {
   return (
     <>
     <div className="flex flex-col justify-start p-4 m-0 h-dvh min-w-dvw overflow-auto
-        bg-linear-to-br from-black via-purple-950 to-black">
-      <div>
+        bg-linear-to-br from-background via-background-secondary to-background-tertiary
+        ">
+      <div className="space-y-2">
           <Header setIsWantToLogout={setIsWantToLogout} />
             <SearchBar 
               searchterm={searchTerm} onSearchChange={setSearchTerm} 
               statusFilter={filterStatus} onStatusChange={setFilterStatus}/>
       
-        <div className="flex items-center justify-center w-fit md:max-w-2xl gap-4 p-2 mx-auto">
+        <div className="flex items-center justify-center gap-2 mb-4 w-2xs mx-auto md:max-w-2xl md:mb-8">
           <FilterBar  filterPrio={filterPrio} setFilterPrio={setFilterPrio}
                       filterCat={filterCat} setFilterCat={setFilterCat}/>
 
           <button onClick={() => setShowForm(true)} 
-                className='px-4 py-2 text-md transition-all duration-700 bg-green-400 
-                rounded-md cursor-pointer w-fit text-white/80
-                hover:scale-105 active:bg-gray-700'>
+                className='px-2 py-1 text-md bg-primary hover:bg-primary-hover active:bg-primary-active
+                rounded-sm cursor-pointer w-fit text-text
+                hover:scale-105 md:py-2 md:px-4 transition-all duration-normal'>
                   Add Task
           </button>
         </div>

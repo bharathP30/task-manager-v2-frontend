@@ -1,1 +1,64 @@
 @import "tailwindcss";
+@theme {
+
+  /* ---------- Backgrounds ---------- */
+
+  --color-background: #0d1117;
+  --color-background-secondary: #111827;
+  --color-background-tertiary: #161b22;
+
+  /* ---------- Surfaces ---------- */
+
+  --color-surface: #161b22;
+  --color-surface-hover: #1f2937;
+  --color-surface-elevated: #21262d;
+
+  /* ---------- Glass ---------- */
+
+  --color-glass: rgb(22 27 34 / 0.58);
+  --color-glass-hover: rgb(31 41 55 / 0.62);
+  --color-glass-border: rgb(255 255 255 / 0.08);
+  --blur-glass: 18px;
+  --blur-blurry: 10px;
+
+  /* ---------- Borders ---------- */
+
+  --color-border: #30363d;
+  --color-border-muted: #21262d;
+  --color-border-focus: #58a6ff;
+
+  /* ---------- Typography ---------- */
+
+  --color-text: #f0f6fc;
+  --color-text-muted: #8b949e;
+  --color-text-disabled: #6e7681;
+
+  /* ---------- Accent ---------- */
+
+  --color-primary: #2f81f7;
+  --color-primary-hover: #58a6ff;
+  --color-primary-active: #1f6feb;
+
+  /* ---------- Status ---------- */
+
+  --color-success: #3fb950;
+  --color-warning: #d29922;
+  --color-danger: #f85149;
+  --color-info: #79c0ff;
+
+  /* ---------- Motion ---------- */
+
+  --ease-default: cubic-bezier(.2,.8,.2,1);
+
+  --duration-super-fast: 50ms;
+  --duration-fast: 150ms;
+  --duration-normal: 220ms;
+  --duration-slow: 320ms;
+  --duration-super-slow: 500ms;
+
+  /* ---------- Typography ---------- */
+
+  --font-sans: "Inter Variable", sans-serif;
+  --font-mono: "JetBrains Mono Variable", monospace;
+
+}

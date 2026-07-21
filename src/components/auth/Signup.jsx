@@ -30,18 +30,23 @@ export default function Signup({ setHaveAcc }) {
 
   return (
     <>
-        <div className='flex flex-col justify-center items-center gap-8 py-8 px-4
-         bg-white/10 border border-white/20 backdrop-blur-md
-         shadow-xl rounded-2xl h-fit font-sans'>
+        <div className='
+        flex flex-col justify-center items-center gap-8 py-12 px-4
+        bg-glass backdrop-blur-glass border border-glass-border rounded-lg
+        h-fit font-sans md:gap-12 md:px-8'>
 
-          <h1 className='font-semibold text-xl'>
+          <h1 className='font-semibold text-2xl text-text/80'>
             Register Now!
           </h1>
-          <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }} className='flex flex-col justify-center gap-4'>
+          <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }} 
+          className='flex flex-col justify-center gap-4'>
 
-            <label className='flex gap-2 justify-center items-center font-semibold text-md' htmlFor="name">Name:
+            <label 
+              className='flex gap-2 justify-center items-center font-normal text-text/70' 
+              htmlFor="name">
+              Name:
               <input 
-              className='flex-1 font-normal rounded-xl outline-1 p-2 focus:ring-1 ring-blue-500 focus:outline-none '
+              className='flex-1 font-light rounded-sm border border-border outline-none p-2 focus:border-border-focus'
                 type="text"
                 name="name"
                 id="name"
@@ -49,9 +54,12 @@ export default function Signup({ setHaveAcc }) {
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
             </label>
 
-            <label className='flex gap-2 justify-center items-center font-semibold text-md' htmlFor="email">Email:
+            <label 
+              className='flex gap-2 justify-center items-center font-normal text-text/70' 
+              htmlFor="email">
+              Email:
               <input
-                className='flex-1 font-normal rounded-xl outline-1 p-2 focus:ring-1 ring-blue-500 focus:outline-none'
+                className='flex-1 font-light rounded-sm border border-border outline-none p-2 focus:border-border-focus'
                 type="email"
                 name="email"
                 id="email"
@@ -59,9 +67,12 @@ export default function Signup({ setHaveAcc }) {
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
             </label>
 
-            <label className='flex gap-2 justify-center items-center font-semibold text-md' htmlFor="password">Password:
+            <label 
+              className='flex gap-2 justify-center items-center font-normal text-text/70' 
+              htmlFor="password">
+              Password:
               <input
-                className='flex-1 font-normal rounded-xl outline-1 p-2 focus:ring-1 ring-blue-500 focus:outline-none '
+                className='flex-1 font-light rounded-sm border border-border outline-none p-2 focus:border-border-focus'
                 type="password"
                 name="password"
                 id="password"
@@ -69,27 +80,29 @@ export default function Signup({ setHaveAcc }) {
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
             </label>
 
-            <label className="text-sm w-fit flex justify-center items-center gap-2" htmlFor="rememberMe">
+            <label 
+              className="text-text-muted w-fit flex justify-center items-center gap-2" 
+              htmlFor="rememberMe">
               <input
                 type="checkbox"
                 name="checkbox"
                 id="rememberMe"
-                value={formData.rememberMe}
+                checked={formData.rememberMe}
                 onChange={(e) => setFormData({ ...formData, rememberMe: e.target.checked })}
               /> Remember me
             </label>
 
             <button type="submit" disabled={isLoading}
-                className="flex-1 sm:w-2/3 sm:mx-auto mt-8 bg-white/10 
-                border border-white/20 rounded-md p-2 transition-all duration-700
-                hover:shadow-xl hover:scale-105 focus:bg-transparent">
+                className="flex-1 mx-4 mt-8 p-2 text-text/80 sm:w-2/3 sm:mx-auto bg-glass hover:bg-glass-hover
+              border border-glass-border rounded-sm transition-all duration-super-slow
+              hover:shadow-sm hover:scale-105 focus:bg-glass-hover">
                 { isLoading? ( isSlow ? "Waking up the Server..." : "Signing up..." ) : "Sign Up" }
             </button>
           </form>
 
-          <small>Already have an account? 
+          <small className="font-light text-text-muted">Already have an account? 
             <button onClick={()=> setHaveAcc(prev => !prev)} 
-            className="font-semibold hover:text-gray-800 hover:font-semibold transition-all duration-400">
+            className="font-semibold text-text-disabled hover:text-text-muted focus:text-text-muted transition-all duration-slow">
               Log In
             </button>
             </small>
